@@ -1,0 +1,168 @@
+<!Doctype HTML>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type='text/css' href="css/prism.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title></title>
+	<style type="text/css">
+		pre {
+	    display: block;
+	    overflow: auto;
+	    background: hsl(210,8%,95%);
+	    padding: 5px;
+	    line-height: 1.2;
+	  }
+
+	  h1 {
+	    border-bottom: 2px solid #224b4b;
+	  }
+
+	  h2 {
+	    border-bottom: 1px solid #224b4b;
+	  }
+
+	  table {
+	    border-collapse: collapse;
+	  }
+
+	  td,
+	  th {
+	    border: 2px solid #224b4b;
+	    padding-left: 5px;
+	    padding-right: 5px;
+	  }
+
+	  img {
+	    display: block;
+	    max-width: 90%;
+	    margin: 2rem auto;
+	  }
+		blockquote {
+	    border-left: 3px solid #224b4b;
+	    color: #224b4b;
+	    padding-left: 5px;
+	    margin-left: 25px;
+	  }
+
+	  p,code {
+	    padding: 3px;
+	  }
+
+	  code {
+	    background: hsl(210,8%,95%);
+	    font-size: 0.875rem;
+	    font-weight: bold;
+	  }
+
+	  
+	  	#container{width: 100%;}
+		.ctr
+		{
+	        /*position: absolute;
+	        left: 50%;top: 2%;
+	        min-width: 600px;
+	        transform: translate(-50%,0);*/
+	  	}#editor_cont{
+	  		min-width: 43%;
+	  		max-width: 43%;
+	  	}#preview_cont{
+			min-width: 53%;
+	  		max-width: 53%;
+	  	}
+	  	#editor{
+	  		width: 100%;
+	  		height: 500px;
+	  		min-height: 300px;
+	  	}#preview{/*
+	  		height: 600px;
+	  		max-height: 300px;
+	  		overflow: auto;*/
+	  	}.shadow{
+	  		box-shadow: 1px 1px 10px 2px #224b4b;
+	  	}.shadow2{
+	  		box-shadow: 1px 0px 0px 0px #224b4b;
+	  	}
+	</style>
+</head>
+<body style='background-color: whitesmoke;' class=''>
+	<div id='container' class="ctr">
+		<div id='editor_cont' class='text-dark mt-2 ml-2 shadow' style='float:left;'>
+			<div class='rounded-top bg-info p-2 shadow text-light'>
+				<i class='fa fa-chain-broken'></i>
+				<span style='font-family: Ruso One; font-size: large; font-weight: bold;' class=''>Editor</span>	
+			</div>
+			<div  style='margin-bottom: -10px;'>
+				<textarea id='editor' onkeyup="refreshPreview()" class='bg-light rounded-bottom p-2' style='dis;outline: none;'>
+					
+				</textarea>
+			</div>
+		</div>
+		<div id='preview_cont' class='my-2 mr-2 text-dark shadow' style="float: right;">
+			<div class='rounded-top bg-info p-2 shadow text-light'>
+				<i class='fa fa-chain'></i>
+				<span style='font-family: Ruso One; font-size: large; font-weight: bold;' class=''>Markdown Preview</span>	
+			</div>
+			<div id='preview' class='rounded-bottom bg-light p-4'>
+				
+			</div>
+		</div>
+	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="js/prism.js"></script>
+    <!--<script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>-->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.1/marked.min.js" integrity="sha512-hzyXu3u+VDu/7vpPjRKFp9w33Idx7pWWNazPm+aCMRu26yZXFCby1gn1JxevVv3LDwnSbyKrvLo3JNdi4Qx1ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script type="text/javascript">
+
+    	var decodeEntities = (function() {
+		  // this prevents any overhead from creating the object each time
+		  var element = document.createElement('div');
+
+		  function decodeHTMLEntities (str) {
+		    if(str && typeof str === 'string') {
+		      // strip script/html tags
+		      str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+		      str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+		      element.innerHTML = str;
+		      str = element.textContent;
+		      element.textContent = '';
+		    }
+
+		    return str;
+		  }
+
+		  return decodeHTMLEntities;
+		})();
+
+    	marked.setOptions({
+		  breaks: true,
+		  highlight: function (code) {
+		    return Prism.highlight(code, Prism.languages.javascript, 'javascript');
+		  }
+		});
+
+    	document.getElementById('editor').innerHTML = "# Welcome to my Markdown Previewer!\n\n## This is a sub-heading...\n### And here's some other cool stuff:\n\nHeres some code, `<div></div>`, between 2 backticks.\n\n```\n// this is multi-line code:\n\nfunction anotherExample(firstLine, lastLine) {\n  if (firstLine == '```' && lastLine == '```') {\n    return multiLineCode;\n  }\n}\n```\n\nYou can also make text **bold**... whoa!\nOr _italic_.\nOr... wait for it... **_both!_**\nAnd feel free to go crazy ~~crossing stuff out~~.\n\nThere's also [links](https://www.freecodecamp.org), and\n> Block Quotes!\n\nAnd if you want to get really crazy, even tables:\n\nWild Header | Crazy Header | Another Header?\n------------ | ------------- | -------------\nYour content can | be here, and it | can be here....\nAnd here. | Okay. | I think we get it.\n\n- And of course there are lists.\n  - Some are bulleted.\n     - With different indentation levels.\n        - That look like this.\n\n\n1. And there are numbered lists too.\n1. Use just 1s if you want!\n1. And last but not least, let's not forget embedded images:\n\n![freeCodeCamp Logo](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2h_XHg-TpdKfnagU4Vwgw-gXP9v8hxYVLK-1O6kyUzGZ12d-WK2cQJFytVLLDZFPBvQk&usqp=CAU)\n";
+
+    	//document.getElementById('editor').innerHTML = '---\n__Advertisement :)__\n\n- __[pica](https://nodeca.github.io/pica/demo/)__ - high quality and fast image\n  resize in browser.\n- __[babelfish](https://github.com/nodeca/babelfish/)__ - developer friendly\n  i18n with plurals support and easy syntax.\n\nYou will like those projects!\n\n---\n\n# h1 Heading 8-)\n## h2 Heading\n### h3 Heading\n#### h4 Heading\n##### h5 Heading\n###### h6 Heading\n\n\n## Horizontal Rules\n\n___\n\n---\n\n***\n\n\n## Typographic replacements\n\nEnable typographer option to see result.\n\n(c) (C) (r) (R) (tm) (TM) (p) (P) +-\n\ntest.. test... test..... test?..... test!....\n\n!!!!!! ???? ,,  -- ---\n\n"Smartypants, double quotes" and \'single quotes\'\n\n\n## Emphasis\n\n**This is bold text**\n\n__This is bold text__\n\n*This is italic text*\n\n_This is italic text_\n\n~~Strikethrough~~\n\n\n## Blockquotes\n\n\n> Blockquotes can also be nested...\n>> ...by using additional greater-than signs right next to each other...\n> > > ...or with spaces between arrows.\n\n\n## Lists\n\nUnordered\n\n+ Create a list by starting a line with `+`, `-`, or `*`\n+ Sub-lists are made by indenting 2 spaces:\n  - Marker character change forces new list start:\n    * Ac tristique libero volutpat at\n    + Facilisis in pretium nisl aliquet\n    - Nulla volutpat aliquam velit\n+ Very easy!\n\nOrdered\n\n1. Lorem ipsum dolor sit amet\n2. Consectetur adipiscing elit\n3. Integer molestie lorem at massa\n\n\n1. You can use sequential numbers...\n1. ...or keep all the numbers as `1.`\n\nStart numbering with offset:\n\n57. foo\n1. bar\n\n\n## Code\n\nInline `code`\n\nIndented code\n\n    // Some comments\n    line 1 of code\n    line 2 of code\n    line 3 of code\n\n\nBlock code "fences"\n\n```\nSample text here...\n```\n\nSyntax highlighting\n\n``` js\nvar foo = function (bar) {\n  return bar++;\n};\n\nconsole.log(foo(5));\n```\n\n## Tables\n\n| Option | Description |\n| ------ | ----------- |\n| data   | path to data files to supply the data that will be passed into templates. |\n| engine | engine to be used for processing templates. Handlebars is the default. |\n| ext    | extension to be used for dest files. |\n\nRight aligned columns\n\n| Option | Description |\n| ------:| -----------:|\n| data   | path to data files to supply the data that will be passed into templates. |\n| engine | engine to be used for processing templates. Handlebars is the default. |\n| ext    | extension to be used for dest files. |\n\n\n## Links\n\n[link text](http://dev.nodeca.com)\n\n[link with title](http://nodeca.github.io/pica/demo/ "title text!")\n\nAutoconverted link https://github.com/nodeca/pica (enable linkify to see)\n\n\n## Images\n\n![Minion](https://octodex.github.com/images/minion.png)\n![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")\n\nLike links, Images also have a footnote style syntax\n\n![Alt text][id]\n\nWith a reference later in the document defining the URL location:\n\n[id]: https://octodex.github.com/images/dojocat.jpg  "The Dojocat"\n\n\n## Plugins\n\nThe killer feature of `markdown-it` is very effective support of\n[syntax plugins](https://www.npmjs.org/browse/keyword/markdown-it-plugin).\n\n\n### [Emojies](https://github.com/markdown-it/markdown-it-emoji)\n\n> Classic markup: :wink: :crush: :cry: :tear: :laughing: :yum:\n>\n> Shortcuts (emoticons): :-) :-( 8-) ;)\n\nsee [how to change output](https://github.com/markdown-it/markdown-it-emoji#change-output) with twemoji.\n\n\n### [Subscript](https://github.com/markdown-it/markdown-it-sub) / [Superscript](https://github.com/markdown-it/markdown-it-sup)\n\n- 19^th^\n- H~2~O\n\n\n### [\\<ins>](https://github.com/markdown-it/markdown-it-ins)\n\n++Inserted text++\n\n\n### [\\<mark>](https://github.com/markdown-it/markdown-it-mark)\n\n==Marked text==\n\n\n### [Footnotes](https://github.com/markdown-it/markdown-it-footnote)\n\nFootnote 1 link[^first].\n\nFootnote 2 link[^second].\n\nInline footnote^[Text of inline footnote] definition.\n\nDuplicated footnote reference[^second].\n\n[^first]: Footnote **can have markup**\n\n    and multiple paragraphs.\n\n[^second]: Footnote text.\n\n\n### [Definition lists](https://github.com/markdown-it/markdown-it-deflist)\n\nTerm 1\n\n:   Definition 1\nwith lazy continuation.\n\nTerm 2 with *inline markup*\n\n:   Definition 2\n\n        { some code, part of Definition 2 }\n\n    Third paragraph of definition 2.\n\n_Compact style:_\n\nTerm 1\n  ~ Definition 1\n\nTerm 2\n  ~ Definition 2a\n  ~ Definition 2b\n\n\n### [Abbreviations](https://github.com/markdown-it/markdown-it-abbr)\n\nThis is HTML abbreviation example.\n\nIt converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.\n\n*[HTML]: Hyper Text Markup Language\n\n### [Custom containers](https://github.com/markdown-it/markdown-it-container)\n\n::: warning\n*here be dragons*\n:::\n';
+
+    	function refreshPreview() {
+    		//console.log("REFRESH")
+    		var str = (document.getElementById('editor').value);
+    		
+    		//console.log(document.getElementById('editor').value);
+    		document.getElementById('preview').innerHTML = marked.parse(str);
+    	}
+
+    	refreshPreview();
+    </script>
+</body>
+</html>
