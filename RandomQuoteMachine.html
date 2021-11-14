@@ -24,10 +24,10 @@
                 }a{text-decoration: none;}
                 a :hover{text-decoration: none; cursor: pointer;}
                 .button{
-                    padding: 7px;
+                    
                 }
                 .button :hover{
-                    opacity: 0.2;
+                    opacity: 0.7;
                     cursor: pointer;
                 }.bgColor{
                     background-color: rgb(52, 34, 36);
@@ -47,13 +47,13 @@
                     </div>
                     <div id='bottom-panel' class='pl-4 pb-5 mt-1' style='position: relative;'>
                         <div class='' style='font-size: x-large; float: left;'>
-                            <a class='mx-2 textColor'onclick='updateLink()' href='https://twitter.com/intent/tweet'><i class='fa fa-twitter'></i></a>
-                            <a class='mx-2 textColor' href='#'><i class='fa fa-facebook'></i></a>
-                            <a class='mx-2 textColor' href='#'><i class='fa fa-instagram'></i></a>
+                            <a class='mx-2 textColor button'onclick='updateLink()' href='https://twitter.com/intent/tweet'><i class='fa fa-twitter'></i></a>
+                            <a class='mx-2 textColor button' href='#'><i class='fa fa-facebook'></i></a>
+                            <a class='mx-2 textColor button' href='#'><i class='fa fa-instagram'></i></a>
                             
                         </div>
-                        <div class='' style='float:right'>
-                            <a class='button text-white bgColor rounded m-1' on style='display: inline-block' onmousedown='newQuote()'>New quote</a>
+                        <div class='button' style='float:right'>
+                            <a class='text-white bgColor rounded mr-4 p-2' on style='font-size: 15px; display: inline-block' onmousedown='newQuote()'><i class="fa fa-quote-right px-2"></i></a>
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                   break;
                 }
               }
-            }
+            }   
 
             fade = function(right){
                 if (right > 2) return;
@@ -140,7 +140,7 @@
                     }).fadeIn('slow');
 
                     $("#text_author").fadeOut('slow',function() {
-                      $(this).text('-' + quote['author'])
+                      $(this).text('- ' + quote['author'])
                     }).fadeIn('slow');
                 }
             }
