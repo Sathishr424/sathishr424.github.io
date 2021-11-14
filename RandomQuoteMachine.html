@@ -53,8 +53,7 @@
                             
                         </div>
                         <div class='' style='float:right'>
-                            <a class='button text-white bgColor rounded m-1' style='display: inline-block' onclick='newQuote()'>New quote</a>
-                            <a class='button text-white bgColor rounded m-1' style='display: inline-block' onclick='shuffleColor()'>Color</a>
+                            <a class='button text-white bgColor rounded m-1' on style='display: inline-block' onmousedown='newQuote()'>New quote</a>
                         </div>
                     </div>
                 </div>
@@ -90,53 +89,10 @@
               }
             }
 
-            shuffle = function(){
-                var newColor = [getRandom(0,255), getRandom(0,255), getRandom(0,255)];
-                var subColor = [];
-                Object.assign(subColor,lastColor);
-                var color = "rgb(" + subColor[0] + "," + subColor[1] + "," + subColor[2] + ")";
-                var bg = document.getElementsByClassName('bgColor');
-                var tc = document.getElementsByClassName('textColor');
-                
-                var diff = [newColor[0]-lastColor[0], newColor[1]-lastColor[1], newColor[2]-lastColor[2]];
-                //console.log("Diff", diff);
-                var val = 0;
-                var theInterval = setInterval(function(){
-                    if (val < 14){
-                        subColor = [subColor[0]+parseInt(diff[0]/15), parseInt(subColor[1]+diff[1]/15), parseInt(subColor[2]+diff[2]/15)];
-                        color = "rgb(" + subColor[0] + "," + subColor[1] + "," + subColor[2] + ")";
-                        
-                        for (var i in bg){
-                            try {bg[i].style.backgroundColor = color;}
-                            catch {}
-                        }
-                        for (var i in tc){
-                            try {tc[i].style.color = color;}
-                            catch {}
-                        }
-                    }else{
-                        subColor = [subColor[0]+parseInt(diff[0]/15), parseInt(subColor[1]+diff[1]/15), parseInt(subColor[2]+diff[2]/15)];
-                        color = "rgb(" + subColor[0] + "," + subColor[1] + "," + subColor[2] + ")";
-                        
-                        for (var i in bg){
-                            try {bg[i].style.backgroundColor = color;}
-                            catch {}
-                        }
-                        for (var i in tc){
-                            try {tc[i].style.color = color;}
-                            catch {}
-                        }
-                        clearInterval(theInterval);
-                        lastColor = subColor;
-                    }val += 1;
-                    
-                }, 50);
-            }
-
-            fade = function(){
+            fade = function(right){
+                if (right > 2) return;
+                console.log(right);
                 var quote = quotes[Math.floor(Math.random()*quotes.length)];
-                //document.getElementById('text_quote').innerHTML = "";
-                //document.getElementById('text_author').innerHTML = '-' + "";
                 var newColor = [getRandom(0,255), getRandom(0,255), getRandom(0,255)];
                 var subColor = [];
                 Object.assign(subColor,lastColor);
@@ -172,38 +128,27 @@
                             try {tc[i].style.color = color;}
                             catch {}
                         }
-                        // document.getElementById('text_quote').innerHTML = quote['quote'];
-                        // document.getElementById('text_author').innerHTML = '-' + quote['author'];
-                        
                         clearInterval(theInterval);
                         lastColor = subColor;
                     }val += 1;
                     
                 }, 50);
 
-                $("#text_quote").fadeOut('slow',function() {
-                  $(this).text(quote['quote'])
-                }).fadeIn('slow');
+                if (right == 1){
+                    $("#text_quote").fadeOut('slow',function() {
+                      $(this).text(quote['quote'])
+                    }).fadeIn('slow');
 
-                $("#text_author").fadeOut('slow',function() {
-                  $(this).text('-' + quote['author'])
-                }).fadeIn('slow');
-
-                // $('#text_quote').fadeIn('slow', function(){
-                //    document.getElementById('text_quote').innerHTML = quote['quote'];
-                // });
-                // $('#text_author').fadeIn('slow', function(){
-                //     document.getElementById('text_author').innerHTML = '-' + quote['author'];
-                // });
+                    $("#text_author").fadeOut('slow',function() {
+                      $(this).text('-' + quote['author'])
+                    }).fadeIn('slow');
+                }
             }
 
 
-            function newQuote(){
-                fade();
-            }
-
-            function shuffleColor(){
-                shuffle();
+            function newQuote(e){
+                if (!e) fade(window.event.which);
+                else fade(e.button);
             }
 
             fade();
