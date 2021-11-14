@@ -40,10 +40,10 @@
             <div id='container' class=''>
                 <div id='quote-box' class='textColor p-4 bg-light rounded'>
                     <div id='text' class='px-4 pt-4' style='font-size: x-large; font-family: sans-serif; font-weight: 500;'>
-                        <i class="fa fa-quote-left px-2"></i><span id='text_quote' class='text-justify'>My friends are my inspiration, and all of them are true friends that support me. On a daily basis, I know that I have my friends to rely on.</span>
+                        <i class="fa fa-quote-left px-2"></i><span id='text_quote' class='text-justify'></span>
                     </div>
                     <div id='author' style='font-size: large;'>
-                        <p id='text_author' class='text-right' style='text-align: right; padding-right: 20px; font-weight: 400;'>- Reem Acra</p>
+                        <p id='text_author' class='text-right' style='text-align: right; padding-right: 20px; font-weight: 400;'>- </p>
                     </div>
                     <div id='bottom-panel' class='pl-4 pb-5 mt-1' style='position: relative;'>
                         <div class='' style='font-size: x-large; float: left;'>
@@ -151,7 +151,7 @@
                 else fade(e.button);
             }
 
-            fade();
+            fade(1);
 
             function updateLink(cur){
                 this.href = "https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text=" + document.getElementById('text_quote').innerHTML;
