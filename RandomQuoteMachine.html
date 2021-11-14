@@ -40,7 +40,7 @@
             <div id='container' class=''>
                 <div id='quote-box' class='textColor p-4 bg-light rounded'>
                     <div id='text' class='px-4 pt-4' style='font-size: x-large; font-family: sans-serif; font-weight: 500;'>
-                        <i class="fa fa-quote-left px-2"></i><span id='text_quote' class='text-justify'></span>
+                        <i class="fa fa-quote-left px-2"></i><span class='button' onclick='shuffleColor()' id='text_quote' class='text-justify'></span>
                     </div>
                     <div id='author' style='font-size: large;'>
                         <p id='text_author' class='text-right' style='text-align: right; padding-right: 20px; font-weight: 400;'>- </p>
@@ -149,6 +149,10 @@
             function newQuote(e){
                 if (!e) fade(window.event.which);
                 else fade(e.button);
+            }
+
+            function shuffleColor(){
+                fade(2);
             }
 
             fade(1);
