@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>Calculator</title>
+    <!--<link rel="stylesheet" type='text/css' href="css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Share Tech Mono' rel='stylesheet'>
+    
+    <!-- <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script> -->
+    <style type="text/css">
+      *{padding: 0px; margin: 0px; user-select: none;}
+      .border{
+        border: solid 1px black;
+      }#container{
+          box-shadow: 1px 1px 10px 2px #224b4b;
+          position: absolute;
+          top: 50%;
+          left:50%;
+          transform: translate(-50%,-50%);
+      }#display{
+        width: 350px;
+        padding: 5px;
+      }.btnDouble{
+        background-color: #212529;
+        text-align: center;
+        border: solid 1px grey;
+      }.btnDouble:hover {opacity: 0.6; cursor: pointer;}
+    </style>   
+  </head>
+  <body style='background-color: ghostwhite;'>
+    <div class='row m-2 justify-content-md-center text-info' style='font-weight: bold;'>Not finished yet..</div>
+    <div id='container' class='rounded bg-dark text-light'>
+      <div id='calculator' class='rounded' style='border: solid 1px grey;'>
+        <div id='inputs' class='rounded m-1' style='border:solid 1px grey;'>
+          <div class='px-2'><p id='formulaInput' style='text-align: right; font-family: digital; margin:0px'></p></div>
+          <div><p id='display' style='text-align: right; font-weight: bold; font-family: digital; margin:0px; font-size: larger;'>0</p></div>
+        </div>
+        <div class='row ml-0' style='width:100%'>
+          <div id='clear' onclick='clearInput()' class='col m-1 px-1 py-2 btnDouble rounded'>AC</div>
+          <div id='backspace' onclick='backspace()' class='col m-1 px-1 py-2 btnDouble rounded'><i class='fas fa-backspace'></i></div>
+        </div>
+        <div class='row ml-0' style='width:100%'>
+          <div id='seven' onclick='numInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>7</div>
+          <div id='eight' onclick='numInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>8</div>
+          <div id='nine' onclick='numInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>9</div>
+          <div id='add' onclick='oppInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>+</div>
+        </div>
+        <div class='row ml-0' style='width:100%'>
+          <div id='four' onclick='numInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>4</div>
+          <div id='five' onclick='numInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>5</div>
+          <div id='six' onclick='numInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>6</div>
+          <div id='subtract' onclick='oppInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>-</div>
+        </div>
+        <div class='row ml-0' style='width:100%'>
+          <div id='one' onclick='numInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>1</div>
+          <div id='two' onclick='numInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>2</div>
+          <div id='three' onclick='numInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>3</div>
+          <div id='multiply' onclick='oppInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>x</div>
+        </div>
+        <div class='row ml-0' style='width:100%'>
+          <div id='decimal' onclick="decInput(this)" class='col m-1 px-1 py-2 btnDouble rounded'>.</div>
+          <div id='zero' onclick='numInput(this)' class='col m-1 px-1 py-2 btnDouble rounded' style=''>0</div>
+          <div id='equals' onclick='answer()' class='col m-1 px-1 py-2 btnDouble rounded'>=</div>
+          <div id='divide' onclick='oppInput(this)' class='col m-1 px-1 py-2 btnDouble rounded'>/</div>
+        </div>
+      </div>
+      <div class='text-light pt-2 text-center'><p style='padding: 0px; margin: 0px;text-decoration: none; color: white; font-size: normal; font-family: Share Tech Mono, sans;'>Designed and Coded By</p></div>
+                <div class='text-light pb-2 text-center'><p style='padding: 0px; margin: 0px;text-decoration: none; color: white; font-size: normal; font-family: Share Tech Mono, sans;'><a href='https://instagram.com/kratos_424/' target='_blank' class='text-white'><i class='fa fa-instagram p-1'></i>Kratos_424</a></p></div>
+    </div>
+    <!--<script src="../js/jquery.js" type="text/javascript"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script> -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+      var isOperator = false;
+      var reset = false;
+
+      function numInput(e){
+        if (reset || isOperator || document.getElementById('display').innerHTML == '0') {
+          document.getElementById('display').innerHTML = e.innerHTML; 
+          isOperator = false;
+        }
+        else document.getElementById('display').innerHTML += e.innerHTML;
+        if (reset) document.getElementById('formulaInput').innerHTML = e.innerHTML;
+        else document.getElementById('formulaInput').innerHTML += e.innerHTML;
+        reser = false;
+      }
+
+      function clearInput() {
+        console.log("CLEAR");
+        document.getElementById('formulaInput').innerHTML = '';
+        document.getElementById('display').innerHTML = '0';
+        isOperator = false;
+        reset = false;
+      }
+
+      function oppInput(e){
+        if (isOperator) {
+          document.getElementById('formulaInput').innerHTML = document.getElementById('formulaInput').innerHTML.substring(0,document.getElementById('formulaInput').innerHTML.length-1) + e.innerHTML;
+          document.getElementById('display').innerHTML = e.innerHTML;
+          return;
+        }
+        if (reset){
+          document.getElementById('formulaInput').innerHTML = document.getElementById('display').innerHTML + e.innerHTML;
+        }
+        else document.getElementById('formulaInput').innerHTML += e.innerHTML;
+        document.getElementById('display').innerHTML = e.innerHTML;
+        isOperator = true;
+        reset = false;
+      }
+
+      function calc(x,y,op){
+        if (op == '+') return parseFloat(x) + parseFloat(y);
+        else if (op == '-') return parseFloat(x) - parseFloat(y);
+        else if (op == '/') return parseFloat(x) / parseFloat(y);
+        else if (op == 'x') return parseFloat(x) * parseFloat(y);
+        else return parseFloat(y);
+      }
+
+      function roundNumber(num, scale) {
+        if(!("" + num).includes("e")) {
+          return +(Math.round(num + "e+" + scale)  + "e-" + scale);
+        } else {
+          var arr = ("" + num).split("e");
+          var sig = ""
+          if(+arr[1] + scale > 0) {
+            sig = "+";
+          }
+          return +(Math.round(+arr[0] + "e" + sig + (+arr[1] + scale)) + "e-" + scale);
+        }
+      }
+
+      function answer(){
+          var ans = 0;
+          var str = document.getElementById('formulaInput').innerHTML;
+          var op = 'None';
+          var opIndex = 0;
+          if (isOperator) {
+            str = str.substring(0,str.length-1);
+            document.getElementById('formulaInput').innerHTML = str;
+          }
+          for (var i=0; i<str.length; i++){
+            if (str[i] == '+' || str[i] == '-' || str[i] == '/' || str[i] == 'x'){
+              ans = roundNumber(calc(ans,str.substring(opIndex,i),op),4); 
+              op = str[i];
+              opIndex = i+1;
+            }
+          }if (op != 'None') ans = calc(ans,str.substring(opIndex,str.length),op);
+          document.getElementById('display').innerHTML = ans;
+          document.getElementById('formulaInput').innerHTML += '= ' + ans;
+          reset = true;
+
+      }
+
+      function backspace(){
+          console.log("CLEAR");
+      }
+
+      function decInput(e){
+        console.log(document.getElementById('display').innerHTML, "DECI", (document.getElementById('display').innerHTML).search('.'));
+        if ((document.getElementById('display').innerHTML).indexOf('.') != -1) return;
+        if (isOperator || document.getElementById('display').innerHTML == '0') {
+          document.getElementById('display').innerHTML = '0' + e.innerHTML; 
+          if (reset) {
+            document.getElementById('formulaInput').innerHTML = '0' + e.innerHTML;
+          }
+          else {
+            document.getElementById('formulaInput').innerHTML += '0' + e.innerHTML;
+          }
+          isOperator = false;
+        }
+        else {
+          if (reset) document.getElementById('display').innerHTML = '0' + e.innerHTML;
+          else document.getElementById('display').innerHTML += e.innerHTML;
+          document.getElementById('formulaInput').innerHTML += e.innerHTML;
+        }
+        
+      }
+
+
+    </script>
+    <!--<script src="../js/bootstrap.bundle.js" type="text/javascript"></script>-->
+  </body>
+</html>
