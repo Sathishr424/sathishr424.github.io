@@ -61,7 +61,7 @@
         </div>
       </div>
       <div id='sessionCount' style='font-family: Share Tech Mono, sans;font-size: x-large; font-weight: bold;' class='row mt-4 justify-content-md-center' >Session 01</div>
-      <div id='timer-label' class='rounded-circle m-2' style="text-align: center;">
+      <div class='rounded-circle m-2' style="text-align: center;">
         <!-- <p id='modeName' style='text-align: center; font-size: x-large; font-family:Share Tech Mono, sans; margin-top: -20px;'>Session</p>
         <p id='modeTime' style='text-align: center; font-size: xx-large; font-family:Share Tech Mono, sans;'>25:00</p> -->
         <svg id='svg' class='mb-2' width='200' height='200' xmlns="http://www.w3.org/2000/svg">
@@ -71,6 +71,8 @@
           <text id='time-left' x='70' y='120' fill='white' style='text-align: center; font-size: x-large; font-family:Share Tech Mono, sans;'>25:00</text>
         </svg>
         <audio id='beep' src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"></audio>
+        <!-- <p id='timer-label'>Session</p>
+        <p id='time-left'>25:00</p> -->
         <div id='buttons' class='row w-100 justify-content-md-center' style="text-align: center;">
         <div class='shadow row text-white w-50 ml-3' style='text-align: center; font-size: xx-large;'>
             <div class='col-6'>
@@ -89,7 +91,6 @@
 
     <!--<script src="../js/jquery.js" type="text/javascript"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script> -->
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -135,6 +136,11 @@
           $('#time-left').attr('fill', 'white');
           session = 1;
           $('#sessionCount').text('Session 01');
+          document.getElementById('beep').pause();
+          document.getElementById('beep').currentTime = 0;
+          $('#timeMode').text('Session');
+          $('#timer-label').text('Session');
+          $('#timeMode').attr('x', '57');
         }
 
         function modifyBreak(increament){
@@ -178,12 +184,14 @@
                 if ($('#timeMode').text() == 'Session'){
                   document.getElementById('beep').play();
                   $('#timeMode').text('Break');
+                  $('#timer-label').text('Break');
                   $('#timeMode').attr('x', '70');
                   $('#time-left').text(td($('#break-length').text()) + ':' + '00');
                   session += 1;
                 }else{
                   document.getElementById('beep').play();
                   $('#timeMode').text('Session');
+                  $('#timer-label').text('Session');
                   $('#timeMode').attr('x', '57');
                   $('#time-left').text(td($('#session-length').text()) + ':' + '00');
                 }
@@ -213,5 +221,6 @@
 
     </script>
     <!--<script src="../js/bootstrap.bundle.js" type="text/javascript"></script>-->
+    <!-- <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script> -->
   </body>
 </html>
