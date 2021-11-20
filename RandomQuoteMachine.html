@@ -94,7 +94,16 @@
             fade = function(right){
                 if (right > 2) return;
                 console.log(right);
-                var quote = quotes[Math.floor(Math.random()*quotes.length)];
+
+                var quote = {};
+                const req = new XMLHttpRequest();
+                req.open("GET", "https://api.quotable.io/random", true);
+                req.send();
+                req.onload = function(){
+                    const json = JSON.parse(req.responseText);
+                    quote = {"quote": json.content, "author": json.author};
+                };
+
                 var newColor = [getRandom(0,255), getRandom(0,255), getRandom(0,255)];
                 var subColor = [];
                 Object.assign(subColor,lastColor);
