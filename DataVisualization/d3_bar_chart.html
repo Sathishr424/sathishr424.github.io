@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>D3 Bar Chart</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style type="text/css">
+      .bar{
+      }.bar:hover{
+        opacity: 1;
+      }svg{
+        padding: 2px;
+      }
+      body{
+        background-color: grey;
+        color: white;
+        text-align: center;
+      }#title{
+        font-size: 25px;
+        border-bottom: solid 1px white;
+      }.shadow{
+        box-shadow: 1px 1px 10px 2px #224b4b;
+      }#tooltip{
+        padding: 5px;
+        color: white;
+        padding-top: 15px;
+        opacity: 0.8;
+        position: absolute;
+        width: 150px;
+        top: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }#container{
+        background-color: #212529;
+        position: absolute;
+        top: 50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+        width: 900px;
+        box-shadow: 1px 1px 10px 2px #224b4b;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id='container'>
+      <div id='title' class='pt-2'>United States GDP</div>
+      <div id='tooltip' style='display: none;' class='rounded bg-dark'>
+        
+      </div>
+      <div id='svg_container'>
+
+      </div>
+      <div class='pt-2 text-center'><p style='padding: 0px; margin: 0px;text-decoration: none; color: white; font-size: normal; font-family: Share Tech Mono, sans;'>Designed and Coded By</p></div>
+        <div class='text-dark pb-2 text-center'><p style='padding: 0px; margin: 0px;text-decoration: none; color: white; font-size: normal; font-family: Share Tech Mono, sans;'><a href='https://instagram.com/kratos_424/' target='_blank' class='text-white'><i class='fa fa-instagram p-1'></i>Kratos_424</a></p></div>
+    </div>
+
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+
+      function alignData(x){
+        var ret = [];
+        for (var i in x){
+          ret.push([parseFloat(x[i][0].substring(0,4) + "." + parseInt(x[i][0].substring(5,7))*(12/10)) ,x[i][1]]);
+        }return ret;
+      }
+
+      const w = 720;
+      const h = 400;
+
+      const rectColor = 'green';
+
+      function convertCurr(x){
+        if (x.length < 4) return x;
+        return x.substring(0,1) + ',' + x.substring(1);
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+
+        const req = new XMLHttpRequest();
+        req.open("GET", "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json", true);
+        req.send();
+        req.onload = function(){
+          var data = JSON.parse(req.responseText);
+          var years = data.data.map(function(item){
+            return new Date(item[0]);
+          });
+          var maxX = new Date(d3.max(years));
+          maxX.setMonth(maxX.getMonth()+3);
+
+          var barWidth = w /data.data.length;
+
+          var barGap = barWidth * 0.9;
+
+          var scaleX = d3.scaleTime().domain([d3.min(years), maxX]).range([0,w]);
+
+          var scaleY = d3.scaleLinear().domain([0, d3.max(data.data, (d)=>d[1])]).range([h,0]);
+
+          console.log(scaleY(data.data[9][1]));
+
+          var svg = d3.select('#svg_container').append('svg').attr('width',w+80).attr('height',h+70);
+
+          var xAxis = d3.axisBottom().scale(scaleX);
+
+          var yAxis = d3.axisLeft().scale(scaleY);
+
+          var toolTip = d3.select('#tooltip');
+          toolTip.attr('class', 'shadow');
+
+          svg.append('g').call(xAxis).attr('id','x-axis').attr('transform','translate(60, '+ (h+20) +')');
+          svg.append('g').call(yAxis).attr('id','y-axis').attr('transform','translate(60, '+ 20 +')');
+
+          svg.append('text').text('Gross Domestic Product').attr('transform', 'rotate(-90)')
+              .attr('x','-300').attr('y','85').style('font-size','20px').style('fill','white');
+
+          svg.append('text').text('More Information: http://www.bea.gov/national/pdf/nipaguid.pdf')
+              .attr('x','360').attr('y',h+60).style('font-size','15px').style('fill','white');
+
+          svg.selectAll('rect').data(data.data).enter().append('rect')
+              .attr('x', (d,i) => scaleX(years[i])+60).attr('y', (d,i) => scaleY(d[1])+20).attr('fill',rectColor)
+              .attr('width', barWidth).attr('height', (d)=> (h) - scaleY(d[1])).attr('data-date',(d,i)=>d[0])
+              .attr('data-gdp', (d)=>d[1]).attr('class','bar').on('mouseover', function(e, d){ console.log(e);
+                d3.select(this).attr('fill','white');
+                toolTip.style('display', 'block')
+                .style('left', (e.offsetX+55) + 'px')
+                .attr('data-date', d3.select(this).attr('data-date'))
+                .append('p').text(d3.select(this).attr('data-date')).append('p').text('$' + convertCurr(d[1] + '') + ' Billion');
+              }).on('mouseout', function(d,i){
+                d3.select(this).attr('fill',rectColor);
+                toolTip.style('display', 'none');
+                toolTip.selectAll('*').remove();
+              });;
+
+
+        };
+
+      });
+    </script>
+  </body>
+</html>

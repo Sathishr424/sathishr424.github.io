@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>D3 Scatter Chart</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style type="text/css">
+      .bar{
+      }.bar:hover{
+        opacity: 1;
+      }svg{
+        padding: 2px;
+      }
+      body{
+        background-color: grey;
+        color: white;
+        text-align: center;
+      }#title{
+        font-size: 25px;
+        border-bottom: solid 1px white;
+      }.shadow{
+        box-shadow: 1px 1px 10px 2px #224b4b;
+      }#tooltip{
+        padding: 5px;
+        color: white;
+        opacity: 1;
+        background-color: #212529;
+        font-size: 12px;
+        position: absolute;
+        min-width: 150px;
+        top: 300px;
+        z-index: 5;
+      }#container{
+        background-color: #212529;
+        position: absolute;
+        top: 50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+        width: 900px;
+        box-shadow: 1px 1px 10px 2px #224b4b;
+      }.tooltipOver{
+        display: block;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id='container'>
+      <div id='title' class='pt-2'></div>
+      <div id='tooltip' style='display: none;' class='rounded bg-dark'>
+        
+      </div>
+      <div id='svg_container'>
+
+      </div>
+      <div class='pt-2 text-center'><p style='padding: 0px; margin: 0px;text-decoration: none; color: white; font-size: normal; font-family: Share Tech Mono, sans;'>Designed and Coded By</p></div>
+        <div class='text-dark pb-2 text-center'><p style='padding: 0px; margin: 0px;text-decoration: none; color: white; font-size: normal; font-family: Share Tech Mono, sans;'><a href='https://instagram.com/kratos_424/' target='_blank' class='text-white'><i class='fa fa-instagram p-1'></i>Kratos_424</a></p></div>
+    </div>
+
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+
+      function alignData(x){
+        var ret = [];
+        for (var i in x){
+          ret.push([parseFloat(x[i][0].substring(0,4) + "." + parseInt(x[i][0].substring(5,7))*(12/10)) ,x[i][1]]);
+        }return ret;
+      }
+
+      const w = 720;
+      const h = 350;
+
+      const w_pad = 40;
+      const h_pad = 40;
+
+      const rectColor = 'green';
+
+      function convertCurr(x){
+        if (x.length < 4) return x;
+        return x.substring(0,1) + ',' + x.substring(1);
+      }
+
+      function secToMin(x){
+        return parseInt(x/60) + ":" + (x%60);
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+
+        const req = new XMLHttpRequest();
+        req.open("GET", "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json", true);
+        req.send();
+        req.onload = function(){
+          var data = JSON.parse(req.responseText);
+
+          var seconds = data.map(function (item){
+            //console.log(item);
+            var time = item.Time.split(":");
+            return new Date(1970, 0, 1, 0, time[0], time[1]);
+          }); 
+
+          var years = data.map(function (item){
+            return item.Year;
+          });
+
+          var cColor = 'green';
+          var altColor = 'red';
+
+          console.log(w,h,w_pad,h_pad);
+
+          d3.select('#title').append('h4').text('Doping in Professional Bicycle Racing');
+          d3.select('#title').append('h5').text("35 Fastest times up Alpe d'Huez");
+
+          var scaleX = d3.scaleLinear().domain([ 1993, 2016]).range([0, w]);
+          var scaleY = d3.scaleTime().domain([ d3.min( seconds ), d3.max( seconds )]).range([0, h]);
+
+          console.log(scaleY(data[5].Seconds));
+
+          var svg = d3.select('#svg_container').append('svg').attr('width',20+w+(w_pad*2)).attr('height',h+(h_pad*2));
+
+          var xAxis = d3.axisBottom().scale(scaleX).tickFormat(d3.format('d'));
+          var yAxis = d3.axisLeft().scale(scaleY).tickFormat(d3.timeFormat('%M:%S'));
+
+          svg.append('g').call(xAxis).attr('id', 'x-axis').attr('transform', 'translate(' + (w_pad+30) + ',' + (h+h_pad) + ')');
+          svg.append('g').call(yAxis).attr('id', 'y-axis').attr('transform', 'translate(' + (w_pad+30) + ',' + h_pad + ')');
+
+          var toolTip = d3.select('#tooltip');
+          toolTip.attr('class', 'shadow');
+
+          svg.selectAll('circle').data(data).enter().append('circle').attr('cy',(d,i)=>scaleY(seconds[i])+h_pad).attr('class','dot')
+          .attr('cx',(d)=>scaleX(d.Year)+w_pad+30).attr('r',6).attr('fill', function(d){
+            if (d.Doping.length > 0) return altColor;
+            return cColor;
+          }).attr('data-xvalue',(d)=>d.Year).attr('data-yvalue',(d,i)=>seconds[i]).on('mouseover',function(e,d){
+            toolTip.style('display', 'block');
+            toolTip.attr('data-year',d.Year);
+            toolTip.append('span').text(d.Name + ": " + d.Nationality);toolTip.append('br');
+            toolTip.append('span').text("Year: " + d.Year +  ", Time: " + d.Time);
+            toolTip.style('left',e.offsetX+w_pad+'px').style('top',e.offsetY-(h_pad/2)+'px');
+            if (d.Doping.length > 0) {toolTip.append('br'); toolTip.append('span').text(d.Doping);}
+          }).on('mouseout',function(e,d){
+            toolTip.style('display', 'none');
+            toolTip.selectAll('*').remove();
+          });
+
+          var legend = svg.append('g').attr('id','legend').attr('transform','translate('+ (w-(w_pad*4)) + ',' + (h/3)+')');
+          legend.append('rect').attr('fill',cColor).attr('width',15).attr('height',15).attr('x',0).attr('y',0);
+          legend.append('rect').attr('fill',altColor).attr('width',15).attr('height',15).attr('x',0).attr('y',20);
+          legend.append('text').attr('fill','white').attr('x',20).attr('y',12).text('No doping allegations').style('font-size','14px');
+          legend.append('text').attr('fill','white').attr('x',20).attr('y',34).text('Riders with doping allegations').style('font-size','14px');
+          svg.append('text').attr('transform','rotate(-90)').text('Time in Minutes').attr('x','-'+h/2).attr('y',w_pad/2)
+          .attr('fill','white').style('font-size','20px');
+
+
+        };
+
+      });
+    </script>
+  </body>
+</html>

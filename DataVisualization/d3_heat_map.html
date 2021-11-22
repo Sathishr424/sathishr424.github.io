@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>D3 Heat Map</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style type="text/css">
+      .bar{
+      }.bar:hover{
+        opacity: 1;
+      }svg{
+        padding: 2px;
+      }
+      body{
+        /*background-color: grey;*/
+        color: black;
+        text-align: center;
+      }#title{
+        font-size: 25px;
+        border-bottom: solid 1px black;
+      }.shadow{
+        box-shadow: 1px 1px 10px 2px #224b4b;
+      }#tooltip{
+        background-color: black;
+        padding: 5px;
+        color: white;
+        opacity: 0.8;
+        position: absolute;
+        width: 150px;
+        top: 300px;
+        left: 0px;
+      }#container{
+        /*background-color: #212529;*/
+        padding: 5px 5px;
+      }.cell:hover{
+        stroke-width: 1;
+        stroke: black;
+      }p{margin: 0px; padding: 0px;}
+    </style>
+  </head>
+  <body>
+
+    <div id='container'>
+      <div id='title' class='pt-2'>Monthly Global Land-Surface Temperature
+      </div>
+      <h5 id='description' class='pt-2'>1753 - 2015: base temperature 8.66℃</h5>
+      <div id='tooltip' style='display: none;' class='rounded bg-dark'>
+        
+      </div>
+      <div id='svg_container'>
+
+      </div>
+      <div class='pt-2 text-center'><p style='padding: 0px; margin: 0px;text-decoration: none; color: black; font-size: normal; font-family: Share Tech Mono, sans;'>Designed and Coded By</p></div>
+        <div class='text-dark pb-2 text-center'><p style='padding: 0px; margin: 0px;text-decoration: none; color: black; font-size: normal; font-family: Share Tech Mono, sans;'><a href='https://instagram.com/kratos_424/' target='_blank' class='text-black'><i class='fa fa-instagram p-1'></i>Kratos_424</a></p></div>
+    </div>
+
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+      const w = 1200;
+      const h = 500;
+
+      const colors = [
+        "#21497c",
+        "#4575B4",
+        "#74ADD1",
+        "#ABD9E9",
+        "#E0F3F8",
+        "#FFFFBF",
+        "#FEE090",
+        "#FDAE61",
+        "#F46D43",
+        "#D73027",
+        "#8c2520"
+      ];
+
+      function roundNumber(num, scale) {
+        if(!("" + num).includes("e")) {
+          return +(Math.round(num + "e+" + scale)  + "e-" + scale);
+        } else {
+          var arr = ("" + num).split("e");
+          var sig = ""
+          if(+arr[1] + scale > 0) {
+            sig = "+";
+          }
+          return +(Math.round(+arr[0] + "e" + sig + (+arr[1] + scale)) + "e-" + scale);
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+
+        const req = new XMLHttpRequest();
+        req.open("GET", "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json", true);
+        req.send();
+        req.onload = function(){
+
+          var data = JSON.parse(req.responseText);
+
+          data.monthlyVariance.forEach(function (val) {
+            val.month -= 1;
+          });
+
+          var months = [
+            "January","February","March","April","May","June","July","August","September","October","November","December"
+          ];
+
+          var margin = {left: 100, bottom: 100, top: 20, right: 50};
+          console.log(data.monthlyVariance.length);
+          var temps = data.monthlyVariance.map(function(item){
+            return 8.66 + item.variance;
+          });
+
+          var tempMin = roundNumber(d3.min(temps),2); var tempMax = roundNumber(d3.max(temps),2);
+
+          var tempDiff = tempMax - tempMin;
+
+          var colVal = roundNumber((tempDiff / (colors.length-2)),2);
+
+          var years = data.monthlyVariance.map(function(item){
+            return item.year;
+          });
+
+          console.log(tempMin, tempMax, colVal);
+
+          var legCol = [];
+          var j = 1;
+          for (var i=tempMin+colVal; i<=tempMax; i+=colVal){
+            legCol.push({temp: i, color: colors[j]});
+            j+=1;
+          }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+          var svg = d3.select('#svg_container').append('svg').attr('width',w+margin.left+margin.right).attr('height',h+margin.top+margin.bottom);
+
+          var scaleX = d3.scaleBand()
+                          .domain(years)
+                          .range([0, w]).padding(0);
+          var scaleY = d3.scaleBand()
+                          .domain([0,1,2,3,4,5,6,7,8,9,10,11])
+                          .range([0, h]).padding(0);
+
+          var rectWidth = scaleX.bandwidth(1999);
+          var rectHeight = scaleY(2) - scaleY(1);
+
+          var xAxis = d3.axisBottom().scale(scaleX).tickValues(scaleX.domain().filter(function (year) {
+        // set ticks to years divisible by 10
+        return year % 10 === 0;
+      })).tickFormat(d3.format('d')).tickSize(10, 1);
+
+          var toolTip = d3.select('#tooltip');
+          toolTip.attr('class', 'shadow');
+
+
+          var yAxis = d3.axisLeft().scale(scaleY).tickValues(scaleY.domain()).tickFormat(function (month) {
+      var date = new Date(0);
+      date.setUTCMonth(month);
+      var format = d3.timeFormat('%B');
+      return format(date);}).tickSize(10, 1);
+
+          svg.append('g').call(xAxis).attr('id','x-axis').attr('transform','translate('+ margin.left + ',' + (h+margin.top) + ')')
+          .append('text').attr('x',w/2).attr('y',margin.bottom/2).text('Years').attr('fill','black').style('font-size','16px');
+          svg.append('g').call(yAxis).attr('id','y-axis').attr('transform','translate('+ margin.left + ',' + margin.top + ')')
+          .append('text').attr('x',-(h/2)).attr('y',-(margin.left/1.5)).text('Months').attr('fill','black')
+          .style('font-size','16px').attr('transform','rotate(-90)');
+
+          svg.selectAll('rect').data(data.monthlyVariance).enter().append('rect')
+          .attr('class','cell').attr('data-month',(d)=>d.month).attr('data-year',(d)=>d.year)
+          .attr('data-temp',(d,i)=>temps[i]).attr('x',(d)=>scaleX(d.year)+margin.left)
+          .attr('y',(d)=>scaleY(d.month)+margin.top).attr('width',rectWidth).attr('height',rectHeight)
+          .attr('fill', function(d,i){
+            if (parseInt(temps[i]/colVal) < 0) console.log(parseInt(temps[i]/colVal));
+            return colors[parseInt(temps[i]/colVal)];
+          }).on('mouseover', function(e,d){
+            //console.log(d,e);
+            toolTip.style('display', 'block');
+            toolTip.attr('data-year',d.year);
+            toolTip.append('p').text(d3.select(this).attr('data-year') + '-' + months[d3.select(this).attr('data-month')]);
+            //toolTip.append('br');
+            toolTip.append('p').text(roundNumber(d3.select(this).attr('data-temp'),1) + '℃');
+            //toolTip.append('br');
+            toolTip.append('p').text(roundNumber(d.variance,1) + '℃');
+            toolTip.style('left',e.offsetX+15+'px').style('top',e.offsetY-15+'px');
+          }).on('mouseout',function(e,d){
+            toolTip.style('display', 'none');
+            toolTip.selectAll('*').remove();
+          });
+
+          var legend = svg.append('g').attr('id','legend').attr('transform','translate('+(w/3)+','+ (h+(margin.bottom/1.9)) +')');
+          
+
+          var legScale = d3.scaleBand().domain(legCol.map(function(item){return item.temp})).range([0, w/6 ]).padding(0);
+
+          var legAxis = d3.axisBottom().scale(legScale).tickValues(legScale.domain()).tickFormat(d3.format('.1f'));
+
+          legend.selectAll('rect').data(legCol).enter().append('rect').attr('x',(d,i)=>legScale(d.temp)).attr('y',0)
+          .attr('width',(d)=>legScale.bandwidth(d.temp)).attr('height',(d)=>legScale.bandwidth(d.temp)).attr('fill',(d)=>d.color);
+
+          legend.append('g').call(legAxis).attr('transform','translate('+(legScale.bandwidth(legCol[0].temp)/2)+','+legScale.bandwidth(legCol[0].temp)+')');
+
+        };
+
+      });
+    </script>
+  </body>
+</html>
