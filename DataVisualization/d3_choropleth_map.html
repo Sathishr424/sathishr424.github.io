@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>D3 Heat Map</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+    <style type="text/css">
+      .states{
+        fill: none;
+        stroke: black;
+        stroke-linejoin: round;
+      }.caption{color: white; fill: white;}
+      }svg{
+        
+      }a{color: white;}
+      a:hover{color: white;}
+      body{
+        font-family: Raleway sans-serif;
+        /*background-color: grey;*/
+        color: white;
+        text-align: center;
+      }#title{
+        color: white;
+        font-size: 25px;
+        border-bottom: solid 1px white;
+      }.shadow{
+        box-shadow: 1px 1px 10px 2px #224b4b;
+      }#tooltip{
+        background-color: black;
+        padding: 5px;
+        color: white;
+        opacity: 0.8;
+        position: absolute;
+        font-size: 12px;
+        top: 300px;
+        border-radius: 5px;
+        left: 0px;
+      }#container{
+        z-index: 5;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        background-color: #212529;*/
+        padding: 5px 5px;
+      }.cell:hover{
+        stroke-width: 1;
+        stroke: black;
+      }p{margin: 0px; padding: 0px;}
+    </style>
+  </head>
+  <body>
+
+    <div id='container'>
+      <div id='title' class='pt-2'>United States Educational Attainment
+      </div>
+      <h5 id='description' class='pt-2 pb-2'>Percentage of adults age 25 and older with a bachelor's degree or higher (2010-2014)
+</h5>
+      <div id='tooltip' style='display: none;' class='rounded bg-dark'>
+        
+      </div>
+      <div id='svg_container'>
+
+      </div>
+      <div class='pt-2 text-center'><p style='padding: 0px; margin: 0px;text-decoration: none; color: white; font-size: normal; font-family: Share Tech Mono, sans;'>Designed and Coded By</p></div>
+        <div class='text-dark pb-2 text-center'><p style='padding: 0px; margin: 0px;text-decoration: none; color: white; font-size: normal; font-family: Share Tech Mono, sans;'><a href='https://instagram.com/sat_ig462/' target='_blank' class='text-black'><i class='fa fa-instagram p-1'></i>Sat_ig462</a></p></div>
+    </div>
+
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/topojson@3"></script>
+
+    <script type="text/javascript">
+
+      const w = 1000;
+      const h = 600;
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+    const EDUCATION_FILE =
+      'https://raw.githubusercontent.com/no-stack-dub-sack/testable-projects-fcc/master/src/data/choropleth_map/for_user_education.json';
+    const COUNTY_FILE =
+      'https://raw.githubusercontent.com/no-stack-dub-sack/testable-projects-fcc/master/src/data/choropleth_map/counties.json';
+
+      Promise.all([d3.json(COUNTY_FILE), d3.json(EDUCATION_FILE)])
+      .then((data) => ready(data[0], data[1]))
+      .catch((err) => console.log(err));
+
+      function ready(data, education){
+
+        var margin = {left: 0, bottom: 0, top: 0, right: 0};
+
+        var path = d3.geoPath();
+
+        var svg = d3.select('#svg_container').append('svg').attr('width',w+margin.left+margin.right)
+        .attr('height',h+margin.top+margin.bottom);
+
+        var maxScore = d3.max(education, (d)=>d.bachelorsOrHigher);
+        var minScore = d3.min(education, (d)=>d.bachelorsOrHigher);
+
+        var color = d3.scaleThreshold()
+                    .domain(d3.range(minScore, maxScore, (maxScore-minScore)/8))
+                    .range(d3.schemeGreens[9]);
+
+        var colorX = d3.scaleLinear()
+                      .domain([minScore, maxScore])
+                      .rangeRound([600,800]);
+
+        var toolTip = d3.select('#tooltip');
+        toolTip.attr('class', 'shadow');
+
+        var legend = svg.append('g')
+          .attr('id', 'legend')
+          .attr('transform','translate('+0+','+0+')');
+
+        legend.selectAll('rect')
+        .data(
+          color.range().map(function (d) {
+            d = color.invertExtent(d);
+            if (d[0] === null) {
+              d[0] = colorX.domain()[0];
+            }
+            if (d[1] === null) {
+              d[1] = colorX.domain()[1];
+            }
+            return d;
+          })
+        )
+        .enter()
+        .append('rect')
+        .attr('height', 8)
+        .attr('x', function (d) {
+          return colorX(d[0]);
+        })
+        .attr('width', function (d) {
+          return d[0] && d[1] ? colorX(d[1]) - colorX(d[0]) : colorX(null);
+        })
+        .attr('fill', function (d) {
+          return color(d[0]);
+        });
+
+        legend.append('text')
+        .attr('class', 'caption')
+        .attr('x', colorX.range()[0])
+        .attr('y', -6)
+        .attr('fill', 'white')
+        .attr('text-anchor', 'start')
+        .attr('font-weight', 'bold');
+
+        legend.call(
+          d3
+            .axisBottom(colorX)
+            .tickSize(13)
+            .tickFormat(function (z) {
+              return Math.round(z) + '%';
+            })
+            .tickValues(color.domain())
+        )
+          .select('.domain')
+          .remove();
+        
+        svg.selectAll('path')
+            .data(topojson.feature(data, data.objects.counties).features)
+            .enter()
+            .append('path')
+            .attr('fill','green')
+            .attr('class', 'county')
+            .attr('d', path)
+            .attr('fill', function (d) {
+              var result = education.filter(function (obj) {
+                return obj.fips === d.id;
+              });
+              if (result[0]) {
+                return color(result[0].bachelorsOrHigher);
+              }
+              // could not find a matching fips id in the data
+              return color(0);
+            }).attr('data-fips', function (d) {
+              return d.id;
+            })
+            .attr('data-education', function (d) {
+              var result = education.filter(function (obj) {
+                return obj.fips === d.id;
+              });
+              if (result[0]) {
+                return result[0].bachelorsOrHigher;
+              }
+              // could not find a matching fips id in the data
+              console.log('could find data for: ', d.id);
+              return 0;
+            }).on('mouseover', function(e,d){
+              var result = education.filter(function (obj) {
+                return obj.fips === d.id;
+              });
+              // console.log(e);
+              // console.log(e.offsetX, e.offsetY);
+              toolTip.style('display', 'block');
+              toolTip.attr('data-education',d3.select(this).attr('data-education'));
+              // console.log(result[0].area_name + "," + result[0].state + ": " + result[0].bachelorsOrHigher + "%");
+              toolTip.append('span').text(result[0].area_name + ", " + result[0].state + ": " + result[0].bachelorsOrHigher + "%");
+              toolTip.style('left',e.screenX+10+'px').style('top',e.pageY-10+'px');
+            }).on('mouseout',function(e,d){
+              toolTip.style('display', 'none');
+              toolTip.selectAll('*').remove();
+            });
+        svg
+        .append('path')
+        .datum(
+          topojson.mesh(data, data.objects.states, function (a, b) {
+            return a !== b;
+          })
+        )
+        .attr('class', 'states').style('z-index','-2')
+        .attr('d', path);
+
+      }
+
+    });
+    </script>
+  </body>
+</html>
