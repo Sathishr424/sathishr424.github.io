@@ -1,0 +1,305 @@
+
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>D3 Tree Map</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+    <style type="text/css">
+      }svg{
+        
+      }a{color: white;}
+      a:hover{color: white;}
+      body{
+        font-family: Raleway sans-serif;
+        /*background-color: grey;*/
+        color: white;
+        text-align: center;
+      }#title{
+        margin-top: 70px;
+        color: white;
+        font-size: 25px;
+        border-bottom: solid 1px white;
+      }.shadow{
+        box-shadow: 1px 1px 10px 2px #224b4b;
+      }#tooltip{
+        background-color: floralwhite;
+        padding: 10px;
+        color: black;
+        opacity: 0.8;
+        position: absolute;
+        font-size: 13px;
+        top: 300px;
+        border-radius: 5px;
+        left: 0px;
+      }#container{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        background-color: #212529;*/
+        padding: 5px 5px;
+      }.cell:hover{
+        stroke-width: 1;
+        stroke: black;
+      }p{margin: 0px; padding: 0px;}
+      #navbar{
+        position: fixed;
+        top: 0px;
+        left:50%;
+        transform: translate(-50%,0%);
+        width: 100%;
+        background-color: #17a2b8;
+        height: 60px;
+        box-shadow: 1px 1px 10px 2px #224b4b;
+      }
+      .btns{
+        position: fixed;
+        top: 10px;
+        left:50%;
+        transform: translate(-50%,0%);
+        width: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id='container'>
+      <div id='title' class='pt-2'>Video Game Sales
+      </div>
+      <h5 id='description' class='pt-2 pb-2'>Top 100 Most Sold Video Games Grouped by Platform
+</h5>
+      <div id='tooltip' style='display: none;' class='rounded bg-dark'>
+        
+      </div>
+      <div id='svg_container'>
+
+      </div>
+      <svg id='legend' width='500'></svg>
+      <div class='pt-2 text-center'><p style='padding: 0px; margin: 0px;text-decoration: none; color: white; font-size: normal; font-family: Share Tech Mono, sans;'>Designed and Coded By</p></div>
+        <div class='text-dark pb-2 text-center'><p style='padding: 0px; margin: 0px;text-decoration: none; color: white; font-size: normal; font-family: Share Tech Mono, sans;'><a href='https://instagram.com/sat_ig462/' target='_blank' class='text-black'><i class='fa fa-instagram p-1'></i>Sat_ig462</a></p></div>
+    </div>
+
+    <!-- <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="//d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
+
+    <script type="text/javascript">
+
+    
+
+      const w = 1000;
+      const h = 600;
+
+      const DATASETS = [
+        {
+          TITLE: 'Video Game Sales',
+          DESCRIPTION: 'Top 100 Most Sold Video Games Grouped by Platform',
+          URL: 'https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/video-game-sales-data.json'
+        },
+        {
+          TITLE: 'Movie Sales',
+          DESCRIPTION:'Top 100 Highest Grossing Movies Grouped By Genre',
+          URL:
+            'https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/movie-data.json'
+        },
+        {
+          TITLE: 'Kickstarter Pledges',
+          DESCRIPTION: 'Top 100 Most Pledged Kickstarter Campaigns Grouped By Category',
+          URL:'https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/kickstarter-funding-data.json'
+        }
+      ];
+
+      changeData(0);
+
+      function changeData(index){
+
+        var currDataset = DATASETS[index];
+
+        var margin = {top: 10, right: 10, bottom: 10, left: 10},
+        width = w - margin.left - margin.right,
+        height = h - margin.top - margin.bottom;
+        // append the svg object to the body of the page
+        var svg = d3.select("#svg_container");
+        svg.selectAll('*').remove();
+
+        d3.select('#legend').selectAll('*').remove();
+
+        svg = svg.append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+
+        // read json data
+
+        Promise.all([d3.json(currDataset.URL)])
+        .then((data) => ready(data[0]))
+        .catch((err) => console.log(err));
+
+
+        function ready(data) {
+
+          console.log(data);
+
+
+          console.log(data.children.length);
+
+          d3.select('#title').html(currDataset.TITLE);
+          d3.select('#description').html(currDataset.DESCRIPTION);
+
+          var clr = [
+            '#1f77b4',
+            '#aec7e8',
+            '#ff7f0e',
+            '#ffbb78',
+            '#2ca02c',
+            '#98df8a',
+            '#d62728',
+            '#ff9896',
+            '#9467bd',
+            '#c5b0d5',
+            '#8c564b',
+            '#c49c94',
+            '#e377c2',
+            '#f7b6d2',
+            '#7f7f7f',
+            '#c7c7c7',
+            '#bcbd22',
+            '#dbdb8d',
+            '#17becf',
+            '#9edae5'
+          ];
+          var lastName = '';
+          var color = data.children.map(function(item, i){
+            if (item.name != lastName){
+              lastName = item.name;
+              return {'name':item.name, 'color':clr[i]};
+            }
+          });
+          console.log(color);
+
+          // Give the data to this cluster layout:
+          var root = d3.hierarchy(data) // Here the size of each leave is given in the 'value' field in input data
+          .eachBefore(function (d){
+            d.data.id = (d.parent ? d.parent.data.id + '.' : '') + d.data.name;
+          })
+          .sum(function(d){ return d.value})
+          .sort(function (a,b){
+            return b.height - a.height || b.value - a.value;
+          }) 
+
+          var toolTip = d3.select('#tooltip');
+          toolTip.attr('class', 'shadow');
+
+          // Then d3.treemap computes the position of each element of the hierarchy
+          d3.treemap()
+            .size([width, height])
+            .padding(0)
+            (root)
+
+          // use this information to add rectangles:
+          var cell = svg
+            .selectAll("g")
+            .data(root.leaves())
+            .enter()
+            .append('g')
+            .attr('class','group')
+            .attr('transform',function(d){
+              return 'translate('+d.x0+','+d.y0+')';
+            });
+
+            cell.append("rect").attr('class','tile')
+              .attr('data-name', (d)=>d.data.name)
+              .attr('data-category',(d)=>d.data.category)
+              .attr('data-value',(d)=>d.data.value)
+              .attr('width', function (d) { return d.x1 - d.x0; })
+              .attr('height', function (d) { return d.y1 - d.y0; })
+              .style("stroke", "white")
+              .style("fill", function (d,i){
+                //console.log(d);
+                for (var j=0; j<color.length; j++){
+                  if (color[j].name == d.parent.data.name) return color[j].color;
+                }return "white";
+              }).on('mousemove',function(e,d){
+                // console.log(d);
+                  toolTip.attr('data-value',d.data.value);
+                  toolTip.html("Name: " + d.data.name + "<br>"
+                              + "Category: " + d.data.category + "<br>"
+                              +"Value: " + d.data.value);
+                  toolTip.style("display",'block');
+                  toolTip.style('left',e.pageX+10+'px').style('top',e.pageY-10+'px');
+              }).on('mouseout', function(e){
+                  toolTip.style("display",'none');
+              })
+
+          // and to add the text labels
+          cell
+            .append('text')
+            .selectAll('tspan')
+            .style('cursor','default')
+            .data(function (d) {
+              // console.log(d);
+              return d.data.name.split(/(?=[A-Z][^A-Z])/g);
+            })
+            .enter()
+            .append('tspan')
+            .attr('x', 4)
+            .style('font-size','10px')
+            .attr('fill','black')
+            .attr('y', function (d, i) {
+              return 13 + (i * 10);
+            })
+            .text(function (d) {
+              return d;
+            });
+
+            var legendRectSize = 20;
+
+            var legend = d3.select('#legend')
+            .attr('width', 170*3)
+              .attr('height',legendRectSize*(parseInt(color.length/3)+1)+(5*(parseInt(color.length/3)+1))).append('g')
+                      .attr('transform','translate('+ 0 +',' + 0 +')');
+
+            genLegend(color.slice(0,parseInt(color.length/3)),0,legendRectSize,legend);
+            genLegend(color.slice(parseInt(color.length/3),parseInt(color.length/3)*2),170,legendRectSize,legend);
+            genLegend(color.slice(parseInt(color.length/3)*2),340,legendRectSize,legend);
+            
+          };
+
+          function genLegend(color,x,legendRectSize,legend){
+
+            var l1 = legend.append('g').attr('transform','translate('+ x +',' + 0 +')');
+            l1.selectAll('rect').data(color)
+                .enter()
+                .append('rect')
+                .attr('class','legend-item')
+                .attr('y',(d,i)=> i*(legendRectSize+5))
+                .attr('width',legendRectSize)
+                .attr('height',legendRectSize)
+                .attr('fill',(d)=>d.color);
+            console.log(color.slice(0,parseInt(color.length/2)));
+
+            l1.selectAll('text').data(color)
+                .enter()
+                .append('text')
+                .attr('x',legendRectSize+5)
+                .attr('y',(d,i)=> (i*(legendRectSize+5)+2.5+(legendRectSize/2)))
+                .text((d)=> ' - ' + d.name)
+                .attr('fill','white');
+          }
+
+      }
+      d3.select('body').append('div').attr('id','navbar');
+      var btns = d3.select('body').append('div').attr('class','row btns');
+        for (var d in DATASETS) btns.append('p').attr('class','btn btn-dark col mx-2').text(DATASETS[d].TITLE).attr('onclick','changeData('+d+')');
+
+    </script>
+  </body>
+</html>
