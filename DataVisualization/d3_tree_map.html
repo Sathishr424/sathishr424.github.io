@@ -59,7 +59,7 @@
         top: 10px;
         left:50%;
         transform: translate(-50%,0%);
-        width: 500px;
+        width: 100%;
       }
     </style>
   </head>
@@ -92,6 +92,13 @@
     <script type="text/javascript">
 
     
+      function getRandom(start, end){
+        return Math.floor(Math.random()*(end-start)) + start
+      }
+
+      function getRandomColor(){
+          return "rgb(" + getRandom(10,200) + "," + getRandom(10,200) + "," + getRandom(10,200) + ")";
+      }
 
       const w = 1000;
       const h = 600;
@@ -112,6 +119,21 @@
           TITLE: 'Kickstarter Pledges',
           DESCRIPTION: 'Top 100 Most Pledged Kickstarter Campaigns Grouped By Category',
           URL:'https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/kickstarter-funding-data.json'
+        },
+        {
+          TITLE: 'Best Selling PC Games',
+          DESCRIPTION: 'List of best selling PC games',
+          URL:'https://raw.githubusercontent.com/Sathishr424/JsonFiles/main/List_of_best-selling_PC_games.json'
+        },
+        {
+          TITLE: 'Best selling PS Games',
+          DESCRIPTION: 'List of Best selling PS Games',
+          URL:'https://raw.githubusercontent.com/Sathishr424/JsonFiles/main/List_of_best-selling_PlayStation_video_games.json'
+        },
+        {
+          TITLE: 'Best selling XBOX-360 Games',
+          DESCRIPTION: 'List of Best selling Xbox-360 Games',
+          URL:'https://raw.githubusercontent.com/Sathishr424/JsonFiles/main/List_of_best-selling_Xbox_360_video_games.json'
         }
       ];
 
@@ -149,7 +171,7 @@
           console.log(data);
 
 
-          console.log(data.children.length);
+          console.log("LEGNTH", data.children.length);
 
           d3.select('#title').html(currDataset.TITLE);
           d3.select('#description').html(currDataset.DESCRIPTION);
@@ -176,6 +198,16 @@
             '#17becf',
             '#9edae5'
           ];
+          console.log(data.children.length);
+          for (var i=0; i<data.children.length; i++){
+            clr.push(getRandomColor());
+          }
+
+          var length = 0;
+          for (var i=0; i<data.children.length; i++){
+            length += data.children[i].children.length;
+          }console.log("TOTAL LENGTH", length);
+
           var lastName = '';
           var color = data.children.map(function(item, i){
             if (item.name != lastName){
@@ -261,17 +293,23 @@
             });
 
             var legendRectSize = 20;
+            var legendSize = 220;
 
             var legend = d3.select('#legend')
-            .attr('width', 170*3)
+            .attr('width', legendSize*3)
               .attr('height',legendRectSize*(parseInt(color.length/3)+1)+(5*(parseInt(color.length/3)+1))).append('g')
                       .attr('transform','translate('+ 0 +',' + 0 +')');
 
             genLegend(color.slice(0,parseInt(color.length/3)),0,legendRectSize,legend);
-            genLegend(color.slice(parseInt(color.length/3),parseInt(color.length/3)*2),170,legendRectSize,legend);
-            genLegend(color.slice(parseInt(color.length/3)*2),340,legendRectSize,legend);
+            genLegend(color.slice(parseInt(color.length/3),parseInt(color.length/3)*2),legendSize,legendRectSize,legend);
+            genLegend(color.slice(parseInt(color.length/3)*2),(legendSize*2),legendRectSize,legend);
             
           };
+
+          function limitChar(x){
+            if (x.length > 20) return x.substring(0,25);
+            return x;
+          }
 
           function genLegend(color,x,legendRectSize,legend){
 
@@ -291,14 +329,14 @@
                 .append('text')
                 .attr('x',legendRectSize+5)
                 .attr('y',(d,i)=> (i*(legendRectSize+5)+2.5+(legendRectSize/2)))
-                .text((d)=> ' - ' + d.name)
+                .text((d)=> ' - ' + limitChar((d.name)))
                 .attr('fill','white');
           }
 
       }
       d3.select('body').append('div').attr('id','navbar');
       var btns = d3.select('body').append('div').attr('class','row btns');
-        for (var d in DATASETS) btns.append('p').attr('class','btn btn-dark col mx-2').text(DATASETS[d].TITLE).attr('onclick','changeData('+d+')');
+        for (var d in DATASETS) btns.append('p').attr('class','btn btn-dark col ml-4').text(DATASETS[d].TITLE).attr('onclick','changeData('+d+')');
 
     </script>
   </body>
