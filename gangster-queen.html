@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="GQ PS.png">
+    <title>Scroll Effect</title>
+    <link rel="stylesheet" href="https://anijs.github.io/lib/anicollection/anicollection.css" />
+    <link rel="stylesheet" href="output.css" />
+    <!--  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Rubik+Distressed&display=swap" rel="stylesheet">
+    <!--  -->
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .newFont{
+            font-family: 'Rubik Distressed', cursive;
+            color: red;
+        }
+        .subFont{
+            font-family: 'Fredoka One', cursive;
+            font-size: 20px;
+            font-weight: 100;
+        }
+    </style>
+</head>
+<body class="bg-gray-600">
+    <video class="fixed left-0 right-0 w-[100vw] h-[100vh] object-cover z-[-1]" autoplay muted loop id="myVideo">
+        <source src="bg.mp4" type="video/mp4">
+    </video>
+    <!-- <div class="bg-black fixed left-0 right-0 w-[100vw] h-[100vh] object-cover z-[-2]">
+
+    </div> -->
+    <div id="navbar" class="fixed left-0 right-0 navbar p-2 py-3 bg-transparent flex flex-row justify-between items-center text-white font-light z-10">
+        <div class="flex-grow">
+        </div>
+        <a class="text-lg px-3 hover:text-red-400 cursor-pointer">Home</a>
+        <a class="text-lg px-3 hover:text-red-400 cursor-pointer">About</a>
+        <a class="text-lg px-3 hover:text-red-400 cursor-pointer">Roadmap</a>
+        <a class="text-lg px-3 hover:text-red-400 cursor-pointer">Mint Now</a>
+    </div>
+    <div id="blank" class="cover h-[100vh]">
+
+    </div>
+    <div class="overflow-clip w-full flex flex-col justify-center items-center">
+        <div data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="flex justify-center my-40 max-w-full">
+            <img src="Color Fill light-compressed.jpg" class='w-[90%] my-2'/>
+        </div>
+        <div class="subFont flex flex-col items-center text-center justify-center text-white my-40 w-[95%] md:w-[50%]">
+            <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="newFont text-4xl font-bolder my-4">WELCOME TO THE <span class="text-white">GANGSTER QUEENS</span></h2>
+            <h3 data-anijs="if: scroll, on: window, do: rubberBand animated, before: $scrollReveal repeat" class="text-2xl my-2 italic newFont">WOMEN MAFIA WORLD</h3>
+            <br>
+            <h4 class="my-2" data-anijs="if: scroll, on: window, do: fadeInLeft animated, before: $scrollReveal repeat">
+                In the world of mafia, people are still being discriminated by gender, We came here with a gang to dominate the men and taking over the mafia world under the Queens control
+            </h4>
+            <br>
+            <h4 class="my-2" data-anijs="if: scroll, on: window, do: fadeInRight animated, before: $scrollReveal repeat">
+                Gangster Queens is a collection of 10000 unique women NFTs, ruling (dominating) the mafia world in the ethereum blockchain.
+            </h4>
+        </div>
+        <div class="relative flex flex-row items-center text-center justify-between text-white w-[80%] mt-40 p-5 py-24">
+            <img class="absolute w-[100%] h-[100%]" class="absolute" src="3.png">
+          <div class="">
+          </div>
+          <div class="w-[60%] subFont">
+            <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="newFont text-4xl font-bolder my-6">THE COM<span class="text-white">MUNI</span>TY</h2>
+            <h2 class="my-4" data-anijs="if: scroll, on: window, do: fadeInLeft animated, before: $scrollReveal repeat">
+                In the world of mafia, people are still being discriminated by gender, We came here with a gang to dominate the men and taking over the mafia world under the Queens control
+            </h2>
+            <h2 class="my-4" data-anijs="if: scroll, on: window, do: fadeInRight animated, before: $scrollReveal repeat">
+                Owning our NFT means that, more than an investment, you are a part of Queens gang where you can get Tokens by staking your NFTs, P2E in-game rewards, continued NFT collection free airdrops, Mafia City Lands and high quality merchs.
+            </h2>
+          </div>  
+        </div>
+
+        <div class="newFont text-red w-full bg-white p-4 flex flex-row justify-center my-20">
+            <h2 class=" text-5xl text-red"><span class="text-black">TRUST  YOUR </span> QUEENS</h2>
+        </div>
+
+        <div class="relative flex flex-row justify-center items-center text-white max-w-[80%] mb-20">
+            <img class="w-[50%]" src="4(1).png" alt="">
+            <div class="subFont text-center absolute flex flex-col w-[50%] max-h-[100%] justify-center items-center">
+                <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="newFont text-4xl font-bolder my-6">THE <span class="text-white">PRO</span>JECT</h2>
+                <h2 class="my-4" data-anijs="if: scroll, on: window, do: fadeInLeft animated, before: $scrollReveal repeat">
+                    Our Token $TGQ will launch by in the beginning of Q1 2023 followed by the event of Mafia City launch. There will be 13 cities controlled by the Queens gang. NFT holders will have access to the mafia cities to stake their NFTs to earn $TGQ Tokens. Cities Under Control !!!
+                </h2>
+            </div>
+            <img class="w-[50%]" src="4(2).png" alt="">
+        </div>
+
+        <div class="relative flex flex-row text-center justify-between text-white w-[80%] my-40 p-5 py-24">
+            <img class="w-[100%] h-[100%] absolute" src="5.png">
+            <div class="w-[60%] subFont mt-10">
+              <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="newFont text-4xl font-bolder my-6">THE FUTU<span class="text-white">RISTIC</span> GA<span class="text-white">ME</span></h2>
+              <h2 class="my-4" data-anijs="if: scroll, on: window, do: fadeInLeft animated, before: $scrollReveal repeat">
+                First time, In the history of metaverse, our Gangster Queens team planning to launch an Online Action Adventure 3D Multiplayer Play2Earn game based on mafia women characters. This game will be the most realistic graphics game in the history of metaverse.
+              </h2>
+              <h2 class="my-4" data-anijs="if: scroll, on: window, do: fadeInRight animated, before: $scrollReveal repeat">
+                Ready to witness the new ERA of P2E metaverse gaming soon !!!
+              </h2>
+            </div>
+            <div class="">
+            </div>  
+        </div>
+
+        <div class="footer flex flex-row p-2 items-center bg-black w-full text-white">
+            <a href="#blank" class="p-2 hover:text-red-500">Back to top</a>
+        </div>
+    </div>
+    
+
+    <script src="https://anijs.github.io/lib/anijs/anijs.js"></script>
+    <script src="https://anijs.github.io/lib/anijs/helpers/scrollreveal/anijs-helper-scrollreveal.js"></script>
+ </body>
+</body>
+</html>
