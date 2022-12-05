@@ -53,7 +53,7 @@ const startPage = () => {
     .from('.welcome-text2', 4, {x: 200, opacity: 0, ease: Power4.easeInOut}, '-=4')
     .from('.welcome-text3', 4, {x: -200, opacity: 0, ease: Sine.easeInOut})
     .from('.welcome-text4', 4, {x: 200, opacity: 0, ease: Sine.easeInOut}, '-=4')
-    .to('.welcome-text', 2, {x: -200, opacity: 0, ease: Sine.easeInOut}, '+=1')
+    .to('.welcome-text', 2, {x: -200, opacity: 0, ease: Sine.easeInOut}, '+=4')
     .to('.welcome-text2', 2, {x: 200, opacity: 0, ease: Sine.easeInOut}, '-=1')
     .to('.welcome-text3', 2, {x: -200, opacity: 0, ease: Sine.easeInOut}, '-=1')
     .to('.welcome-text4', 2, {x: 200, opacity: 0, ease: Sine.easeInOut}, '-=1')
