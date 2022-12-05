@@ -96,10 +96,10 @@ const startPage = () => {
     .to('.section-five-image2', 2, {x:200, ease: Power3.easeInOut}, '-=2')
     .from('.section-five2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '-=1')
     .from('.section-five3', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '-=2')
-    .to('.section-five-image1', 2, {x:-200, opacity: 0, ease: Power3.easeInOut}, '+=1')
-    .to('.section-five-image2', 2, {x:200, opacity: 0, ease: Power3.easeInOut}, '-=2')
-    .to('.section-five2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '-=2')
+    .to('.section-five2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '+=1')
     .to('.section-five3', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '-=2')
+    .to('.section-five-image1', 2, {x:0, opacity: 0, ease: Power3.easeInOut}, '-=1')
+    .to('.section-five-image2', 2, {x:0, opacity: 0, ease: Power3.easeInOut}, '-=2')
 
     let scene5 = new ScrollMagic.Scene({
         duration: '300%',
