@@ -55,7 +55,7 @@
 
     <div id="scroll-status" class="fixed left-0 top-0 z-50"></div>
 
-    <div class="fixed left-0 top-0 p-1 py-2">
+    <div class="fixed left-0 top-0 p-1 py-2 z-30">
         <img id="titleImage" class="w-[6rem]" src="icon.png" alt="">
     </div>
     <div id="navbar" class="fixed right-0 top-0 navbar p-2 py-3 bg-transparent flex flex-row justify-between items-center text-white font-light z-10">
@@ -65,13 +65,13 @@
         <a class="text-lg px-3 hover:text-red-400 cursor-pointer">Mint Now</a>
     </div>
     
-    <div id="cover-image-parent" class="w-full h-[100vh]">
+    <div id="cover-image-parent" class="cont w-full h-[100vh] opacity-0">
         <div id="cover-image" class="w-full h-[100vh] flex justify-center items-center overflow-hidden">
             <img id="cimage" style="height:80%" src="cover.jpg" class="h-[80%]"/>
         </div>
     </div> 
 
-    <div id="section-two" class="w-full h-screen flex flex-col justify-center items-center overflow-hidden">
+    <div id="section-two" class="cont w-full h-screen flex flex-col justify-center items-center overflow-hidden">
         <div class="flex flex-col items-center text-center justify-center text-white w-[95%] md:w-[50%]">
             <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="welcome-text newFont text-4xl font-bolder my-4">WELCOME TO THE <span class="text-white">GANGSTER QUEENS</span></h2>
             <h3 data-anijs="if: scroll, on: window, do: rubberBand animated, before: $scrollReveal repeat" class="welcome-text2 text-2xl my-2 italic newFont">WOMEN MAFIA WORLD</h3>
@@ -86,7 +86,7 @@
         </div>
     </div>
 
-    <div id="section-three" class="w-full h-screen flex flex-col justify-center items-center overflow-hidden">
+    <div id="section-three" class="cont w-full h-screen flex flex-col justify-center items-center overflow-hidden">
         <div class="relative flex flex-row items-center text-center justify-between text-white p-5 py-24 w-[90%]">
             <img class="section-three2 h-[80%] z-10 mr-[-50%]" class="absolute" src="pic-2.png">
             <div class="w-[60%] subFont">
@@ -107,7 +107,7 @@
         </div>
     </div>
 
-    <div id="section-five" class="flex flex-col justify-center items-center w-full h-screen overflow-hidden">
+    <div id="section-five" class="cont flex flex-col justify-center items-center w-full h-screen overflow-hidden">
         <div class="relative flex flex-row justify-center items-center text-white w-[90%] h-full z-10">
             <img class="absolute section-five-image1 w-[50%]" src="pic-3-left_half.png" alt="">
             <div class="subFont text-center flex flex-col w-[50%] max-h-[100%] justify-center items-center z-20">
@@ -120,7 +120,7 @@
         </div>
     </div>
 
-    <div id="section-six" class="flex flex-col justify-center items-center w-full h-screen overflow-hidden">
+    <div id="section-six" class="cont flex flex-col justify-center items-center w-full h-screen overflow-hidden">
         <div class="relative flex flex-row text-center justify-between items-center text-white w-[80%] p-5">
             <div class="w-[60%] subFont mt-10">
               <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="section-six2 newFont text-4xl font-bolder my-6">THE FUTU<span class="text-white">RISTIC</span> GA<span class="text-white">ME</span></h2>
