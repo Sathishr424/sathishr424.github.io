@@ -52,7 +52,6 @@
 
 #cimage{
     transform-style: preserve-3d;
-    transform: rotateY(90deg) scale(0.2);
 }
 
 @keyframes cover-image-animation {
@@ -64,4 +63,8 @@
     /* to{
         transform: rotateY(0deg) scale(1.0);
     } */
+}
+
+.cont{
+    background-color: rgba(0, 0, 0, 0.844);
 }

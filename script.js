@@ -25,35 +25,42 @@ const startPage = () => {
     enableScrolling();
     let timeline1 = new TimelineMax();
 
-    timeline1.to('#cimage', 2, {
-        css: {transform: 'rotateY(90deg)', opacity: 0},
-        scale: 0.3,
-        autoAlpha: 0,
-        onComplete: function(){
-            // $('#cover-image').hide();
-        }
-    })
+    timeline1
+    .from('#cover-image-parent', 0, {opacity: 0, ease: Sine.easeInOut})
+    .to('#cover-image-parent', 4, {opacity: 1, ease: Sine.easeInOut}, '+=2')
+    .from('#cimage', 8, {
+        css: {transform: 'rotateY(90deg)', opacity: 0, scale: 0.3},
+        ease: Sine.easeInOut
+    }, '-=1')
+    .to('#cimage', 4, {
+        css: {transform: 'rotateY(90deg)', opacity: 0, scale: 0.3},
+        ease: Sine.easeInOut
+    }, '+=8')
+    .to('#cover-image-parent', 2, {opacity: 0, ease: Sine.easeInOut})
 
     let scene1 = new ScrollMagic.Scene({
-        duration: '100%',
-        triggerElement: '#cover-image',
+        duration: '300%',
+        triggerElement: '#cover-image-parent',
         triggerHook: 0
     }).setTween(timeline1)
-    .setPin('#cover-image').addTo(controller);
+    .setPin('#cover-image-parent').addTo(controller);
 
     let timeline2 = new TimelineMax();
 
-    timeline2.from('.welcome-text', 1, {x: -200, opacity: 0, ease: Power3.easeInOut})
-    .from('.welcome-text2', 1, {x: 200, opacity: 0, ease: Power4.easeInOut}, '-=1')
-    .from('.welcome-text3', 1, {x: -200, opacity: 0, ease: Power3.easeInOut})
-    .from('.welcome-text4', 1, {x: 200, opacity: 0, ease: Power3.easeInOut}, '-=1')
-    .to('.welcome-text', 1, {x: -200, opacity: 0, ease: Power3.easeInOut}, '+=1')
-    .to('.welcome-text2', 1, {x: 200, opacity: 0, ease: Power3.easeInOut}, '-=1')
-    .to('.welcome-text3', 1, {x: -200, opacity: 0, ease: Power3.easeInOut}, '-=1')
-    .to('.welcome-text4', 1, {x: 200, opacity: 0, ease: Power3.easeInOut}, '-=1');
+    timeline2
+    .from('#section-two', 4, {opacity: 0, ease: Sine.easeInOut})
+    .from('.welcome-text', 4, {x: -200, opacity: 0, ease: Sine.easeInOut}, '-=4')
+    .from('.welcome-text2', 4, {x: 200, opacity: 0, ease: Power4.easeInOut}, '-=4')
+    .from('.welcome-text3', 4, {x: -200, opacity: 0, ease: Sine.easeInOut})
+    .from('.welcome-text4', 4, {x: 200, opacity: 0, ease: Sine.easeInOut}, '-=4')
+    .to('.welcome-text', 2, {x: -200, opacity: 0, ease: Sine.easeInOut}, '+=1')
+    .to('.welcome-text2', 2, {x: 200, opacity: 0, ease: Sine.easeInOut}, '-=1')
+    .to('.welcome-text3', 2, {x: -200, opacity: 0, ease: Sine.easeInOut}, '-=1')
+    .to('.welcome-text4', 2, {x: 200, opacity: 0, ease: Sine.easeInOut}, '-=1')
+    .to('#section-two', 2, {opacity: 0, ease: Sine.easeInOut}, '-=1');
 
     let scene2 = new ScrollMagic.Scene({
-        duration: '100%',
+        duration: '300%',
         triggerElement: '#section-two',
         triggerHook: 0
     }).setTween(timeline2)
@@ -61,17 +68,20 @@ const startPage = () => {
 
     let timeline3 = new TimelineMax();
 
-    timeline3.from('.section-three2', 2, {x: -200, opacity: 0, ease: Power3.easeInOut})
-    .from('.section-three3', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Bounce.easeInOut})
-    .from('.section-three4', 2, {x: -200, opacity: 0, ease: Power3.easeInOut}, '-=2')
-    .from('.section-three5', 2, {x: 200, opacity: 0, ease: Power3.easeInOut}, '-=2')
-    .to('.section-three2', 2, {x: -200, opacity: 0, ease: Power3.easeInOut}, '+=1')
-    .to('.section-three3', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '-=2')
-    .to('.section-three4', 2, {x: -200, opacity: 0, ease: Power3.easeInOut}, '-=2')
-    .to('.section-three5', 2, {x: 200, opacity: 0, ease: Power3.easeInOut}, '-=2');
+    timeline3
+    .from('#section-three', 4, {opacity: 0, ease: Sine.easeInOut})
+    .from('.section-three2', 4, {x: -200, opacity: 0, ease: Sine.easeInOut}, '-=4')
+    .from('.section-three3', 4, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Bounce.easeInOut})
+    .from('.section-three4', 4, {x: -200, opacity: 0, ease: Sine.easeInOut}, '-=4')
+    .from('.section-three5', 4, {x: 200, opacity: 0, ease: Sine.easeInOut}, '-=4')
+    .to('.section-three2', 2, {x: -200, opacity: 0, ease: Sine.easeInOut}, '+=4')
+    .to('.section-three3', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Sine.easeInOut}, '-=2')
+    .to('.section-three4', 2, {x: -200, opacity: 0, ease: Sine.easeInOut}, '-=2')
+    .to('.section-three5', 2, {x: 200, opacity: 0, ease: Sine.easeInOut}, '-=2')
+    .to('#section-three', 2, {opacity: 0, ease: Sine.easeInOut}, '-=2');
 
     let scene3 = new ScrollMagic.Scene({
-        duration: '100%',
+        duration: '300%',
         triggerElement: '#section-three',
         triggerHook: 0
     }).setTween(timeline3)
@@ -79,10 +89,12 @@ const startPage = () => {
 
     let timeline4 = new TimelineMax();
 
-    timeline4.from('#section-four2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}).to('#section-four2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '+=2')
+    timeline4
+    .from('#section-four2', 4, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Sine.easeInOut})
+    .to('#section-four2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Sine.easeInOut}, '+=4')
 
     let scene4 = new ScrollMagic.Scene({
-        duration: '100%',
+        duration: '200%',
         triggerElement: '#section-four',
         triggerHook: 0
     }).setTween(timeline4)
@@ -90,19 +102,22 @@ const startPage = () => {
 
     let timeline5 = new TimelineMax();
 
-    timeline5.from('.section-five-image1', 2, {opacity: 0, ease: Power3.easeInOut})
-    .from('.section-five-image2', 2, {opacity: 0, ease: Power3.easeInOut}, '-=2')
-    .to('.section-five-image1', 2, {x:-200, ease: Power3.easeInOut})
-    .to('.section-five-image2', 2, {x:200, ease: Power3.easeInOut}, '-=2')
-    .from('.section-five2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '-=1')
-    .from('.section-five3', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '-=2')
-    .to('.section-five2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '+=1')
-    .to('.section-five3', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '-=2')
-    .to('.section-five-image1', 2, {x:0, opacity: 0, ease: Power3.easeInOut}, '-=1')
-    .to('.section-five-image2', 2, {x:0, opacity: 0, ease: Power3.easeInOut}, '-=2')
+    timeline5
+    .from('#section-five', 4, {opacity: 0, ease: Sine.easeInOut})
+    .from('.section-five-image1', 4, {opacity: 0, ease: Sine.easeInOut}, '-=4')
+    .from('.section-five-image2', 4, {opacity: 0, ease: Sine.easeInOut}, '-=4')
+    .to('.section-five-image1', 4, {x:-200, opacity:0.5, ease: Sine.easeInOut})
+    .to('.section-five-image2', 4, {x:200, opacity:0.5, ease: Sine.easeInOut}, '-=4')
+    .from('.section-five2', 4, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Sine.easeInOut}, '-=2')
+    .from('.section-five3', 4, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Sine.easeInOut}, '-=4')
+    .to('.section-five2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Sine.easeInOut}, '+=4')
+    .to('.section-five3', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Sine.easeInOut}, '-=2')
+    .to('.section-five-image1', 2, {x:0, opacity: 0, ease: Sine.easeInOut}, '-=1')
+    .to('.section-five-image2', 2, {x:0, opacity: 0, ease: Sine.easeInOut}, '-=2')
+    .to('#section-five', 2, {opacity: 0, ease: Sine.easeInOut}, '-=2');
 
     let scene5 = new ScrollMagic.Scene({
-        duration: '200%',
+        duration: '400%',
         triggerElement: '#section-five',
         triggerHook: 0
     }).setTween(timeline5)
@@ -110,19 +125,22 @@ const startPage = () => {
 
     let timeline6 = new TimelineMax();
 
-    timeline6.from('.section-six-image', 2, {opacity: 0, x:100, ease: Power3.easeInOut})
+    timeline6
+    .from('#section-six', 4, {opacity: 0, ease: Sine.easeInOut})
+    .from('.section-six-image', 2, {opacity: 0, x:100, ease: Sine.easeInOut}, '-=4')
 
-    .from('.section-six2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut})
-    .from('.section-six3', 2, {x:-100, opacity: 0, ease: Power3.easeInOut}, '-=2')
-    .from('.section-six4', 2, {x:100, opacity: 0, ease: Power3.easeInOut}, '-=2')
+    .from('.section-six2', 4, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Sine.easeInOut})
+    .from('.section-six3', 4, {x:-100, opacity: 0, ease: Sine.easeInOut}, '-=4')
+    .from('.section-six4', 4, {x:100, opacity: 0, ease: Sine.easeInOut}, '-=4')
 
-    .to('.section-six-image', 2, {opacity: 0, x:100, ease: Power3.easeInOut}, '+=2')
-    .to('.section-six2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '-=2')
-    .to('.section-six3', 2, {x:-100, opacity: 0, ease: Power3.easeInOut}, '-=2')
-    .to('.section-six4', 2, {x:100, opacity: 0, ease: Power3.easeInOut}, '-=2')
+    .to('.section-six-image', 2, {opacity: 0, x:100, ease: Sine.easeInOut}, '+=4')
+    .to('.section-six2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Sine.easeInOut}, '-=2')
+    .to('.section-six3', 2, {x:-100, opacity: 0, ease: Sine.easeInOut}, '-=2')
+    .to('.section-six4', 2, {x:100, opacity: 0, ease: Sine.easeInOut}, '-=2')
+    .to('#section-six', 2, {opacity: 0, ease: Sine.easeInOut}, '-=2');
 
     let scene6 = new ScrollMagic.Scene({
-        duration: '100%',
+        duration: '300%',
         triggerElement: '#section-six',
         triggerHook: 0
     }).setTween(timeline6)
@@ -154,18 +172,18 @@ const startPage = () => {
             // console.log("Animation ended")
             x.removeEventListener('animationend', abc);
             x.style.display = 'none';
-            let img = document.getElementById('cimage');
-            img.style.animation = 'cover-image-animation 2s ease-in-out 1s forwards';
+            // let img = document.getElementById('cimage');
+            // img.style.animation = 'cover-image-animation 2s ease-in-out 1s forwards';
 
-            img.addEventListener('animationend', function abc(event){
-                img.removeEventListener('animationend', abc);
-                let p = document.getElementById('cover-image-parent');
-                p.innerHTML = `<div id="cover-image" class="w-full h-[100vh] flex justify-center items-center overflow-hidden">
-                <img id="cimage" style="height:80%; transform: rotateY(0deg) scale(1);" src="cover.jpg" class="h-[80%]"/>
-            </div>`;
+            // img.addEventListener('animationend', function abc(event){
+            //     img.removeEventListener('animationend', abc);
+            //     let p = document.getElementById('cover-image-parent');
+            //     p.innerHTML = `<div id="cover-image" class="w-full h-[100vh] flex justify-center items-center overflow-hidden">
+            //     <img id="cimage" style="height:80%; transform: rotateY(0deg) scale(1);" src="cover.jpg" class="h-[80%]"/>
+            // </div>`;
             
-                startPage();
-            })
+            // })
+            startPage();
         })
     });
 })(jQuery);
