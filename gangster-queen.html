@@ -4,10 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="GQ PS.png">
+    <link rel="icon" type="image/x-icon" href="icon.png">
     <title>Scroll Effect</title>
     <link rel="stylesheet" href="https://anijs.github.io/lib/anicollection/anicollection.css" />
     <link rel="stylesheet" href="output.css" />
+    <link rel="stylesheet" href="custom-style.css" />
+    <link rel="stylesheet" href="scrollbar.css" />
+    <!-- PRELOADING IMAGES -->
+    <link rel="preload" as="video" type="video/mp4" href="bg.mp4" />
+    <link rel="preload" as="image" href="icon.png">
+    <link rel="preload" as="image" href="cover.jpg">
+    <link rel="preload" as="image" href="pic-2.png">
+    <link rel="preload" as="image" href="pic-3-left_half.png">
+    <link rel="preload" as="image" href="pic-3-right_half.png">
+    <link rel="preload" as="image" href="pic-4.png">
+    <!--  -->
     <!--  -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,93 +39,106 @@
         }
     </style>
 </head>
-<body class="bg-gray-600">
-    <video class="fixed left-0 right-0 w-[100vw] h-[100vh] object-cover z-[-1]" autoplay muted loop id="myVideo">
-        <source src="bg.mp4" type="video/mp4">
-    </video>
-    <!-- <div class="bg-black fixed left-0 right-0 w-[100vw] h-[100vh] object-cover z-[-2]">
+<body class="">
 
-    </div> -->
-    <div id="navbar" class="fixed left-0 right-0 navbar p-2 py-3 bg-transparent flex flex-row justify-between items-center text-white font-light z-10">
-        <div class="flex-grow">
-        </div>
+    <div class="bg-black fixed left-0 right-0 w-[100vw] h-[100vh] object-cover z-[-2]">
+
+   </div>
+
+   <video class="fixed left-0 right-0 w-[100vw] h-[100vh] object-cover z-[-1]" autoplay muted loop id="myVideo">
+    <source src="bg.mp4" type="video/mp4">
+    </video>
+
+    <div id="front-cover" class="fixed left-0 top-0 newFont text-red bg-white w-full h-[100vh] z-40">
+        <h2 class="absolute text-5xl text-red">GANGSTER <span class="text-black">QUEENS</span></h2>
+    </div>
+
+    <div id="scroll-status" class="fixed left-0 top-0 z-50"></div>
+
+    <div class="fixed left-0 top-0 p-1 py-2">
+        <img id="titleImage" class="w-[6rem]" src="icon.png" alt="">
+    </div>
+    <div id="navbar" class="fixed right-0 top-0 navbar p-2 py-3 bg-transparent flex flex-row justify-between items-center text-white font-light z-10">
         <a class="text-lg px-3 hover:text-red-400 cursor-pointer">Home</a>
         <a class="text-lg px-3 hover:text-red-400 cursor-pointer">About</a>
         <a class="text-lg px-3 hover:text-red-400 cursor-pointer">Roadmap</a>
         <a class="text-lg px-3 hover:text-red-400 cursor-pointer">Mint Now</a>
     </div>
-    <div id="blank" class="cover h-[100vh]">
-
-    </div>
-    <div class="overflow-clip w-full flex flex-col justify-center items-center">
-        <div data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="flex justify-center my-40 max-w-full">
-            <img src="Color Fill light-compressed.jpg" class='w-[90%] my-2'/>
+    
+    <div id="cover-image-parent" class="w-full h-[100vh]">
+        <div id="cover-image" class="w-full h-[100vh] flex justify-center items-center overflow-hidden">
+            <img id="cimage" style="height:80%" src="cover.jpg" class="h-[80%]"/>
         </div>
-        <div class="subFont flex flex-col items-center text-center justify-center text-white my-40 w-[95%] md:w-[50%]">
-            <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="newFont text-4xl font-bolder my-4">WELCOME TO THE <span class="text-white">GANGSTER QUEENS</span></h2>
-            <h3 data-anijs="if: scroll, on: window, do: rubberBand animated, before: $scrollReveal repeat" class="text-2xl my-2 italic newFont">WOMEN MAFIA WORLD</h3>
+    </div> 
+
+    <div id="section-two" class="w-full h-screen flex flex-col justify-center items-center overflow-hidden">
+        <div class="flex flex-col items-center text-center justify-center text-white w-[95%] md:w-[50%]">
+            <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="welcome-text newFont text-4xl font-bolder my-4">WELCOME TO THE <span class="text-white">GANGSTER QUEENS</span></h2>
+            <h3 data-anijs="if: scroll, on: window, do: rubberBand animated, before: $scrollReveal repeat" class="welcome-text2 text-2xl my-2 italic newFont">WOMEN MAFIA WORLD</h3>
             <br>
-            <h4 class="my-2" data-anijs="if: scroll, on: window, do: fadeInLeft animated, before: $scrollReveal repeat">
+            <h4 class="welcome-text3 my-2" data-anijs="if: scroll, on: window, do: fadeInLeft animated, before: $scrollReveal repeat">
                 In the world of mafia, people are still being discriminated by gender, We came here with a gang to dominate the men and taking over the mafia world under the Queens control
             </h4>
             <br>
-            <h4 class="my-2" data-anijs="if: scroll, on: window, do: fadeInRight animated, before: $scrollReveal repeat">
+            <h4 class="welcome-text4 my-2" data-anijs="if: scroll, on: window, do: fadeInRight animated, before: $scrollReveal repeat">
                 Gangster Queens is a collection of 10000 unique women NFTs, ruling (dominating) the mafia world in the ethereum blockchain.
             </h4>
         </div>
-        <div class="relative flex flex-row items-center text-center justify-between text-white w-[80%] mt-40 p-5 py-24">
-            <img class="absolute w-[100%] h-[100%]" class="absolute" src="3.png">
-          <div class="">
-          </div>
-          <div class="w-[60%] subFont">
-            <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="newFont text-4xl font-bolder my-6">THE COM<span class="text-white">MUNI</span>TY</h2>
-            <h2 class="my-4" data-anijs="if: scroll, on: window, do: fadeInLeft animated, before: $scrollReveal repeat">
+    </div>
+
+    <div id="section-three" class="w-full h-screen flex flex-col justify-center items-center overflow-hidden">
+        <div class="relative flex flex-row items-center text-center justify-between text-white p-5 py-24 w-[90%]">
+            <img class="section-three2 h-[80%] z-10 mr-[-50%]" class="absolute" src="pic-2.png">
+            <div class="w-[60%] subFont">
+            <h2 style="transform-style: preserve-3d;" data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="section-three3 newFont text-4xl font-bolder my-6">THE COM<span class="text-white">MUNI</span>TY</h2>
+            <h2 class="section-three4 my-4" data-anijs="if: scroll, on: window, do: fadeInLeft animated, before: $scrollReveal repeat">
                 In the world of mafia, people are still being discriminated by gender, We came here with a gang to dominate the men and taking over the mafia world under the Queens control
             </h2>
-            <h2 class="my-4" data-anijs="if: scroll, on: window, do: fadeInRight animated, before: $scrollReveal repeat">
+            <h2 class="section-three5 my-4" data-anijs="if: scroll, on: window, do: fadeInRight animated, before: $scrollReveal repeat">
                 Owning our NFT means that, more than an investment, you are a part of Queens gang where you can get Tokens by staking your NFTs, P2E in-game rewards, continued NFT collection free airdrops, Mafia City Lands and high quality merchs.
             </h2>
-          </div>  
+            </div>  
         </div>
+    </div>
 
-        <div class="newFont text-red w-full bg-white p-4 flex flex-row justify-center my-20">
-            <h2 class=" text-5xl text-red"><span class="text-black">TRUST  YOUR </span> QUEENS</h2>
+    <div id="section-four" class="flex flex-col justify-center items-center w-full h-screen overflow-hidden">
+        <div id="section-four2" style="transform-style: preserve-3d;" class="newFont text-red w-full bg-white p-4 flex flex-row justify-center">
+            <h2 class=" text-5xl text-red" style="white-space: nowrap;"><span class="text-black">TRUST  YOUR </span> QUEENS</h2>
         </div>
+    </div>
 
-        <div class="relative flex flex-row justify-center items-center text-white max-w-[80%] mb-20">
-            <img class="w-[50%]" src="4(1).png" alt="">
-            <div class="subFont text-center absolute flex flex-col w-[50%] max-h-[100%] justify-center items-center">
-                <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="newFont text-4xl font-bolder my-6">THE <span class="text-white">PRO</span>JECT</h2>
-                <h2 class="my-4" data-anijs="if: scroll, on: window, do: fadeInLeft animated, before: $scrollReveal repeat">
+    <div id="section-five" class="flex flex-col justify-center items-center w-full h-screen overflow-hidden">
+        <div class="relative flex flex-row justify-center items-center text-white w-[90%] h-full z-10">
+            <img class="absolute section-five-image1 w-[50%]" src="pic-3-left_half.png" alt="">
+            <div class="subFont text-center flex flex-col w-[50%] max-h-[100%] justify-center items-center z-20">
+                <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="section-five2 newFont text-4xl font-bolder my-6">THE <span class="text-white">PRO</span>JECT</h2>
+                <h2 class="my-4 section-five3" data-anijs="if: scroll, on: window, do: fadeInLeft animated, before: $scrollReveal repeat">
                     Our Token $TGQ will launch by in the beginning of Q1 2023 followed by the event of Mafia City launch. There will be 13 cities controlled by the Queens gang. NFT holders will have access to the mafia cities to stake their NFTs to earn $TGQ Tokens. Cities Under Control !!!
                 </h2>
             </div>
-            <img class="w-[50%]" src="4(2).png" alt="">
+            <img class="absolute section-five-image2 w-[50%]" src="pic-3-right_half.png" alt="">
         </div>
+    </div>
 
-        <div class="relative flex flex-row text-center justify-between text-white w-[80%] my-40 p-5 py-24">
-            <img class="w-[100%] h-[100%] absolute" src="5.png">
+    <div id="section-six" class="flex flex-col justify-center items-center w-full h-screen overflow-hidden">
+        <div class="relative flex flex-row text-center justify-between items-center text-white w-[80%] p-5">
             <div class="w-[60%] subFont mt-10">
-              <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="newFont text-4xl font-bolder my-6">THE FUTU<span class="text-white">RISTIC</span> GA<span class="text-white">ME</span></h2>
-              <h2 class="my-4" data-anijs="if: scroll, on: window, do: fadeInLeft animated, before: $scrollReveal repeat">
+              <h2 data-anijs="if: scroll, on: window, do: zoomIn animated, before: $scrollReveal repeat" class="section-six2 newFont text-4xl font-bolder my-6">THE FUTU<span class="text-white">RISTIC</span> GA<span class="text-white">ME</span></h2>
+              <h2 class="section-six3 my-4" data-anijs="if: scroll, on: window, do: fadeInLeft animated, before: $scrollReveal repeat">
                 First time, In the history of metaverse, our Gangster Queens team planning to launch an Online Action Adventure 3D Multiplayer Play2Earn game based on mafia women characters. This game will be the most realistic graphics game in the history of metaverse.
               </h2>
-              <h2 class="my-4" data-anijs="if: scroll, on: window, do: fadeInRight animated, before: $scrollReveal repeat">
+              <h2 class="section-six4 my-4" data-anijs="if: scroll, on: window, do: fadeInRight animated, before: $scrollReveal repeat">
                 Ready to witness the new ERA of P2E metaverse gaming soon !!!
               </h2>
             </div>
-            <div class="">
-            </div>  
-        </div>
-
-        <div class="footer flex flex-row p-2 items-center bg-black w-full text-white">
-            <a href="#blank" class="p-2 hover:text-red-500">Back to top</a>
+            <img class="section-six-image h-[80%] ml-[-50%]" src="pic-4.png">
         </div>
     </div>
     
-
-    <script src="https://anijs.github.io/lib/anijs/anijs.js"></script>
-    <script src="https://anijs.github.io/lib/anijs/helpers/scrollreveal/anijs-helper-scrollreveal.js"></script>
- </body>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/ScrollMagic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/plugins/animation.gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
