@@ -53,9 +53,9 @@ const startPage = () => {
     .to('.welcome-text4', 1, {x: 200, opacity: 0, ease: Power3.easeInOut}, '-=1');
 
     let scene2 = new ScrollMagic.Scene({
-        duration: '200%',
+        duration: '100%',
         triggerElement: '#section-two',
-        triggerHook: 'onLeave'
+        triggerHook: 0
     }).setTween(timeline2)
     .setPin('#section-two').addTo(controller);
 
@@ -71,9 +71,9 @@ const startPage = () => {
     .to('.section-three5', 2, {x: 200, opacity: 0, ease: Power3.easeInOut}, '-=2');
 
     let scene3 = new ScrollMagic.Scene({
-        duration: '200%',
+        duration: '100%',
         triggerElement: '#section-three',
-        triggerHook: 'onLeave'
+        triggerHook: 0
     }).setTween(timeline3)
     .setPin('#section-three').addTo(controller);
 
@@ -82,9 +82,9 @@ const startPage = () => {
     timeline4.from('#section-four2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}).to('#section-four2', 2, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Power3.easeInOut}, '+=2')
 
     let scene4 = new ScrollMagic.Scene({
-        duration: '200%',
+        duration: '100%',
         triggerElement: '#section-four',
-        triggerHook: 'onLeave'
+        triggerHook: 0
     }).setTween(timeline4)
     .setPin('#section-four').addTo(controller);
 
@@ -102,9 +102,9 @@ const startPage = () => {
     .to('.section-five-image2', 2, {x:0, opacity: 0, ease: Power3.easeInOut}, '-=2')
 
     let scene5 = new ScrollMagic.Scene({
-        duration: '300%',
+        duration: '200%',
         triggerElement: '#section-five',
-        triggerHook: 'onLeave'
+        triggerHook: 0
     }).setTween(timeline5)
     .setPin('#section-five').addTo(controller);
 
@@ -122,9 +122,9 @@ const startPage = () => {
     .to('.section-six4', 2, {x:100, opacity: 0, ease: Power3.easeInOut}, '-=2')
 
     let scene6 = new ScrollMagic.Scene({
-        duration: '200%',
+        duration: '100%',
         triggerElement: '#section-six',
-        triggerHook: 'onLeave'
+        triggerHook: 0
     }).setTween(timeline6)
     .setPin('#section-six').addTo(controller);
 }
