@@ -54,6 +54,18 @@
     transform-style: preserve-3d;
 }
 
+.custom-img{
+    height: 70%;
+    max-height: 673px;
+    width: auto;
+}
+
+.custom-img2{
+    height: 90%;
+    max-height: 758px;
+    width: auto;
+}
+
 @keyframes cover-image-animation {
     50%{
         transform: rotateY(85deg) scale(0.3);
