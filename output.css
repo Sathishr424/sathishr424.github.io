@@ -653,16 +653,16 @@ video {
   z-index: 50;
 }
 
+.z-30 {
+  z-index: 30;
+}
+
 .z-10 {
   z-index: 10;
 }
 
 .z-20 {
   z-index: 20;
-}
-
-.z-30 {
-  z-index: 30;
 }
 
 .float-right {
@@ -846,10 +846,6 @@ video {
 
 .w-\[6rem\] {
   width: 6rem;
-}
-
-.w-\[100\%\] {
-  width: 100%;
 }
 
 .w-\[95\%\] {
