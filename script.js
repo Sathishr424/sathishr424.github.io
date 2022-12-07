@@ -4,6 +4,7 @@ window.onscroll = function() {myFunction()};
 
 $(() => {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
+    disableScrolling();
 })
 
 function myFunction() {
@@ -26,7 +27,7 @@ const enableScrolling = () => {
 let controller = new ScrollMagic.Controller();
 
 const startPage = () => {
-
+    enableScrolling();
     let timeline0 = new TimelineMax();
 
     // timeline0
@@ -41,7 +42,9 @@ const startPage = () => {
     // }}, '-=0.5')
     
     timeline0
-    .set('#cover-image-parent', {opacity: 0})
+    .set('#cover-image-parent', {opacity: 0, onComplete: () => {disableScrolling(); 
+        document.getElementById('dummy-placeholder').style.height = '0px';
+        document.body.scrollTop = document.documentElement.scrollTop = 0;}})
     .set('#cimage', {css: {transform: 'rotateY(0deg)'}})
     .set('#cimage', {y: 200, z: -100, scale: 0.2, opacity: 0})
     .to('#cover-image-parent', 1, {opacity: 1, ease: Sine.easeInOut})
@@ -53,13 +56,16 @@ const startPage = () => {
 
     let scene0 = new ScrollMagic.Scene({
         triggerElement: '#cover-image-parent',
-        triggerHook: 0,
+        triggerHook: 1,
+        reverse: false
     }).setTween(timeline0)
     .addTo(controller);
 
     let timeline1 = new TimelineMax();
 
     timeline1
+    // .set('#cimage', {css: {transform: 'rotateY(0deg)'}})
+    // .set('#cimage', {y: 0, z: 0, scale: 1, opacity: 1})
     // .from('#cover-image-parent', 0, {opacity: 0, ease: Sine.easeInOut})
     // .to('#cover-image-parent', 4, {opacity: 1, ease: Sine.easeInOut}, '+=2')
     // .from('#cimage', 8, {
@@ -67,7 +73,7 @@ const startPage = () => {
     //     ease: Sine.easeInOut
     // }, '-=1')
     .to('#cimage', 4, {
-        css: {transform: 'rotateY(90deg)', opacity: 0, scale: 0.3},
+        css: {transform: 'rotateY(90deg)', opacity: 0},
         ease: Sine.easeInOut
     }, '+=4')
     .to('#cover-image-parent', 4, {opacity: 0, ease: Sine.easeInOut})
@@ -75,7 +81,7 @@ const startPage = () => {
     let scene1 = new ScrollMagic.Scene({
         triggerElement: '#cover-image-parent',
         triggerHook: 0,
-        duration: '100%',
+        duration: '200%',
     }).setTween(timeline1)
     .addTo(controller)
     .setPin('#cover-image-parent')
@@ -224,7 +230,6 @@ const startPage = () => {
     });
     loadImages.then(function() {
         // console.log("IMAGE LOADED")
-        disableScrolling();
         var x = document.getElementById("front-cover");
     
         x.addEventListener('animationend', function abc(event){
