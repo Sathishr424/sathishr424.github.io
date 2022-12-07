@@ -1,6 +1,10 @@
-document.body.scrollTop = document.documentElement.scrollTop = 0;
+
 
 window.onscroll = function() {myFunction()};
+
+$(() => {
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+})
 
 function myFunction() {
   var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -22,28 +26,63 @@ const enableScrolling = () => {
 let controller = new ScrollMagic.Controller();
 
 const startPage = () => {
-    enableScrolling();
+
+    let timeline0 = new TimelineMax();
+
+    // timeline0
+    // .set('#cover-image-parent', {opacity: 0, ease: Sine.easeInOut})
+    // .to('#cover-image-parent', 0.5, {opacity: 1, ease: Sine.easeInOut, scale: 1})
+    // .from('#cimage', 0.5, {
+    //     css: {transform: 'rotateY(90deg)', opacity: 0, scale: 0.3},
+    //     ease: Sine.easeInOut
+    //     , onComplete: () => {
+    //         console.log("Finished");
+    //         enableScrolling();
+    // }}, '-=0.5')
+    
+    timeline0
+    .set('#cover-image-parent', {opacity: 0})
+    .set('#cimage', {css: {transform: 'rotateY(0deg)'}})
+    .set('#cimage', {y: 200, z: -100, scale: 0.2, opacity: 0})
+    .to('#cover-image-parent', 1, {opacity: 1, ease: Sine.easeInOut})
+    .to('#cimage', 1, {scale: 0.5, opacity: 1, ease: Sine.easeIn}, '-=1')
+    .to('#cimage', 0.5, {scale: 1, z: 0, y: 0, ease: Sine.easeIn, onComplete: () => {
+                console.log("Finished");
+                enableScrolling();
+    }}, '-=0.5')
+
+    let scene0 = new ScrollMagic.Scene({
+        triggerElement: '#cover-image-parent',
+        triggerHook: 0,
+    }).setTween(timeline0)
+    .addTo(controller);
+
     let timeline1 = new TimelineMax();
 
     timeline1
-    .from('#cover-image-parent', 0, {opacity: 0, ease: Sine.easeInOut})
-    .to('#cover-image-parent', 4, {opacity: 1, ease: Sine.easeInOut}, '+=2')
-    .from('#cimage', 8, {
-        css: {transform: 'rotateY(90deg)', opacity: 0, scale: 0.3},
-        ease: Sine.easeInOut
-    }, '-=1')
+    // .from('#cover-image-parent', 0, {opacity: 0, ease: Sine.easeInOut})
+    // .to('#cover-image-parent', 4, {opacity: 1, ease: Sine.easeInOut}, '+=2')
+    // .from('#cimage', 8, {
+    //     css: {transform: 'rotateY(90deg)', opacity: 0, scale: 0.3},
+    //     ease: Sine.easeInOut
+    // }, '-=1')
     .to('#cimage', 4, {
         css: {transform: 'rotateY(90deg)', opacity: 0, scale: 0.3},
         ease: Sine.easeInOut
-    }, '+=8')
-    .to('#cover-image-parent', 2, {opacity: 0, ease: Sine.easeInOut})
+    }, '+=4')
+    .to('#cover-image-parent', 4, {opacity: 0, ease: Sine.easeInOut})
 
     let scene1 = new ScrollMagic.Scene({
-        duration: '300%',
         triggerElement: '#cover-image-parent',
-        triggerHook: 0
+        triggerHook: 0,
+        duration: '100%',
     }).setTween(timeline1)
-    .setPin('#cover-image-parent').addTo(controller);
+    .addTo(controller)
+    .setPin('#cover-image-parent')
+    .on('leave', (el) => {
+        if (el.scrollDirection == "FORWARD") window.scrollBy(0, window.innerHeight);
+        else window.scrollBy(0, -(window.innerHeight));
+    });
 
     let timeline2 = new TimelineMax();
 
@@ -53,18 +92,22 @@ const startPage = () => {
     .from('.welcome-text2', 4, {x: 200, opacity: 0, ease: Power4.easeInOut}, '-=4')
     .from('.welcome-text3', 4, {x: -200, opacity: 0, ease: Sine.easeInOut})
     .from('.welcome-text4', 4, {x: 200, opacity: 0, ease: Sine.easeInOut}, '-=4')
-    .to('.welcome-text', 2, {x: -200, opacity: 0, ease: Sine.easeInOut}, '+=4')
+    .to('.welcome-text', 2, {x: -200, opacity: 0, ease: Sine.easeInOut}, '+=8')
     .to('.welcome-text2', 2, {x: 200, opacity: 0, ease: Sine.easeInOut}, '-=1')
     .to('.welcome-text3', 2, {x: -200, opacity: 0, ease: Sine.easeInOut}, '-=1')
     .to('.welcome-text4', 2, {x: 200, opacity: 0, ease: Sine.easeInOut}, '-=1')
     .to('#section-two', 2, {opacity: 0, ease: Sine.easeInOut}, '-=1');
 
     let scene2 = new ScrollMagic.Scene({
-        duration: '300%',
+        duration: '200%',
         triggerElement: '#section-two',
         triggerHook: 0
     }).setTween(timeline2)
-    .setPin('#section-two').addTo(controller);
+    .setPin('#section-two').addTo(controller)
+    .on('leave', (el) => {
+        if (el.scrollDirection == "FORWARD") window.scrollBy(0, window.innerHeight);
+        else window.scrollBy(0, -(window.innerHeight));
+    });
 
     let timeline3 = new TimelineMax();
 
@@ -81,11 +124,15 @@ const startPage = () => {
     .to('#section-three', 2, {opacity: 0, ease: Sine.easeInOut}, '-=2');
 
     let scene3 = new ScrollMagic.Scene({
-        duration: '300%',
+        duration: '200%',
         triggerElement: '#section-three',
         triggerHook: 0
     }).setTween(timeline3)
-    .setPin('#section-three').addTo(controller);
+    .setPin('#section-three').addTo(controller)
+    .on('leave', (el) => {
+        if (el.scrollDirection == "FORWARD") window.scrollBy(0, window.innerHeight);
+        else window.scrollBy(0, -(window.innerHeight));
+    });
 
     let timeline4 = new TimelineMax();
 
@@ -98,15 +145,19 @@ const startPage = () => {
         triggerElement: '#section-four',
         triggerHook: 0
     }).setTween(timeline4)
-    .setPin('#section-four').addTo(controller);
+    .setPin('#section-four').addTo(controller)
+    .on('leave', (el) => {
+        if (el.scrollDirection == "FORWARD") window.scrollBy(0, window.innerHeight);
+        else window.scrollBy(0, -(window.innerHeight));
+    });
 
     let timeline5 = new TimelineMax();
 
     timeline5
     .from('#section-five', 4, {opacity: 0, ease: Sine.easeInOut})
-    .from('.section-five-image1', 4, {opacity: 0, ease: Sine.easeInOut}, '-=4')
-    .from('.section-five-image2', 4, {opacity: 0, ease: Sine.easeInOut}, '-=4')
-    .to('.section-five-image1', 4, {x:-200, opacity:0.5, ease: Sine.easeInOut})
+    .from('.section-five-image1', 6, {opacity: 0, ease: Sine.easeInOut}, '-=2')
+    .from('.section-five-image2', 6, {opacity: 0, ease: Sine.easeInOut}, '-=6')
+    .to('.section-five-image1', 4, {x:-200, opacity:0.5, ease: Sine.easeInOut}, '+=4')
     .to('.section-five-image2', 4, {x:200, opacity:0.5, ease: Sine.easeInOut}, '-=4')
     .from('.section-five2', 4, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Sine.easeInOut}, '-=2')
     .from('.section-five3', 4, {css: {transform: 'translateZ(-200)', opacity: 0}, ease: Sine.easeInOut}, '-=4')
@@ -121,7 +172,11 @@ const startPage = () => {
         triggerElement: '#section-five',
         triggerHook: 0
     }).setTween(timeline5)
-    .setPin('#section-five').addTo(controller);
+    .setPin('#section-five').addTo(controller)
+    .on('leave', (el) => {
+        if (el.scrollDirection == "FORWARD") window.scrollBy(0, window.innerHeight);
+        else window.scrollBy(0, -(window.innerHeight));
+    });
 
     let timeline6 = new TimelineMax();
 
@@ -144,7 +199,11 @@ const startPage = () => {
         triggerElement: '#section-six',
         triggerHook: 0
     }).setTween(timeline6)
-    .setPin('#section-six').addTo(controller);
+    .setPin('#section-six').addTo(controller)
+    .on('leave', (el) => {
+        if (el.scrollDirection == "FORWARD") window.scrollBy(0, window.innerHeight);
+        else window.scrollBy(0, -(window.innerHeight));
+    });
 }
 
 (function($) {
@@ -169,20 +228,8 @@ const startPage = () => {
         var x = document.getElementById("front-cover");
     
         x.addEventListener('animationend', function abc(event){
-            // console.log("Animation ended")
             x.removeEventListener('animationend', abc);
             x.style.display = 'none';
-            // let img = document.getElementById('cimage');
-            // img.style.animation = 'cover-image-animation 2s ease-in-out 1s forwards';
-
-            // img.addEventListener('animationend', function abc(event){
-            //     img.removeEventListener('animationend', abc);
-            //     let p = document.getElementById('cover-image-parent');
-            //     p.innerHTML = `<div id="cover-image" class="w-full h-[100vh] flex justify-center items-center overflow-hidden">
-            //     <img id="cimage" style="height:80%; transform: rotateY(0deg) scale(1);" src="cover.jpg" class="h-[80%]"/>
-            // </div>`;
-            
-            // })
             startPage();
         })
     });
