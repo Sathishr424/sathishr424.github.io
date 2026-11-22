@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock AI · Sathish Kumar</title>
+<meta name="description" content="A voice interviewer that talks back: practice interviews out loud and get a scored report with a stronger answer.">
+<link rel="canonical" href="https://sathishr424.github.io/projects/mock-ai.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mock AI · Sathish Kumar">
+<meta property="og:description" content="A voice interviewer that talks back: practice interviews out loud and get a scored report with a stronger answer.">
+<meta property="og:url" content="https://sathishr424.github.io/projects/mock-ai.html">
+<meta property="og:image" content="https://sathishr424.github.io/assets/img/mock-ai/cover-upwork.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="../index.html" aria-label="Sathish Kumar, home"><span class="mark">SK</span><span class="brand-name">Sathish Kumar</span></a>
+    <nav aria-label="Main">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#contact">Contact</a>
+      <a class="nav-cta" href="../Sathish-Kumar-Resume.pdf" target="_blank" rel="noopener">Resume</a>
+    </nav>
+  </div>
+</header>
+<main id="main" class="proj">
+<div class="wrap">
+  <a class="back" href="../index.html#work"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M19 12H5 M11 6l-6 6 6 6"/></svg>All projects</a>
+  <header class="proj-head">
+    <p class="card-kind"><span class="dot dot-personal"></span>Personal project · 2026</p>
+    <h1>Mock AI</h1>
+    <p class="lede">A voice interviewer that talks back: practice interviews out loud and get a scored report with a stronger answer.</p>
+    <div class="proj-links"><span class="link-note">Code walkthrough and demo available on request.</span></div>
+  </header>
+  <figure class="proj-cover"><img src="../assets/img/mock-ai/cover-upwork.webp" width="1600" height="1200" alt="Mock AI cover" decoding="async"></figure>
+  <div class="proj-grid">
+    <aside class="proj-side">
+      <dl class="facts"><div><dt>Role</dt><dd>Sole developer</dd></div><div><dt>Time to first audio</dt><dd>3–5 seconds</dd></div><div><dt>Tests</dt><dd>800+ automated</dd></div></dl>
+      <ul class="tags"><li>Python</li><li>FastAPI</li><li>WebSockets</li><li>TypeScript</li><li>Whisper</li><li>Ollama</li><li>Docker</li><li>Playwright</li></ul>
+    </aside>
+    <article class="prose"><h2>The problem</h2><p>Reading interview questions is easy. Answering them out loud, under a little pressure, is not. Most practice tools are text chat, and they never show you <i>how</i> your answer could have been better.</p><h2>What I built</h2><p>Mock AI runs three kinds of interview: a recruiter call, a technical round (you pick the role, level, skills and difficulty) and a behavioural round. The interviewer asks one question at a time, follows up when an answer is vague, and lets you talk over it. When it ends you get:</p><ul><li>a score out of 100 and a mark out of 10 for each of the round's criteria</li><li>strengths, what to work on, and feedback under every answer in the transcript</li><li>a stronger rewrite of one of your answers</li><li>a recording of both voices, long pauses trimmed, that you can replay from any line or download</li></ul><figure class="fig wide"><img src="../assets/img/mock-ai/06-report-score-and-criteria.webp" width="1600" height="873" alt="The report: overall score, summary and per-criterion marks." loading="lazy" decoding="async"><figcaption>The report: overall score, summary and per-criterion marks.</figcaption></figure><h2>How it works</h2><p>Audio streams over a single FastAPI WebSocket through voice detection, speech-to-text, the LLM interviewer and text-to-speech. Replies are spoken sentence by sentence as they're generated, so the first audio arrives in 3–5 seconds. Each stage sits behind an interface, so the same app runs fully local on a 6 GB GPU (Whisper, Chatterbox, Ollama) or on cloud APIs (Cartesia, Ollama Cloud) by changing configuration.</p><h2>The hard parts</h2><ul><li><b>Turn-taking.</b> Telling when someone has finished speaking, not just paused to think, without cutting them off.</li><li><b>Interruptions.</b> When you speak over the interviewer, playback stops, and the conversation only keeps what you actually heard.</li><li><b>The recording.</b> Merging both voices into one timeline, trimming the thinking gaps, and linking each transcript line to its point in the audio. Audio never leaves the browser.</li><li><b>Useful scores from a small model.</b> Schema-validated JSON with one retry and per-round criteria on the server. In testing, strong interviews scored 75–88 and weak ones 13–20.</li></ul><figure class="fig wide"><img src="../assets/img/mock-ai/09-transcript-with-recording.webp" width="1600" height="873" alt="The transcript with the recording and per-answer feedback." loading="lazy" decoding="async"><figcaption>The transcript with the recording and per-answer feedback.</figcaption></figure><h2>Engineering</h2><ul><li>Built test-first: about 560 backend tests, 187 client unit tests and 92 Playwright end-to-end tests, including accessibility checks</li><li>A stub mode so the test suite runs without any models, plus smoke tests against real ones</li><li>Multi-stage Docker builds and Compose profiles for the local-GPU and cloud setups</li></ul></article>
+  </div>
+  <nav class="pn" aria-label="More projects">
+    <a href="custom-order-builder.html"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M19 12H5 M11 6l-6 6 6 6"/></svg>Previous</span><b>Custom Order Builder</b></a>
+    <a class="pn-next" href="satchat.html"><span>Next<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M5 12h14 M13 6l6 6-6 6"/></svg></span><b>SatChat</b></a>
+  </nav>
+</div>
+</main>
+<footer class="foot" id="contact">
+  <div class="wrap foot-in">
+    <div>
+      <p class="eyebrow">Contact</p>
+      <h2 class="foot-title">Open to full-stack and backend roles.</h2>
+      <p class="foot-sub">I&#x27;m looking for a full-stack or backend role on a product team, working on real-time systems, data pipelines or AI-powered features. I also take freelance projects.</p>
+    </div>
+    <div class="foot-links">
+      <a class="btn btn-primary" href="mailto:rsathishikumar3@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M3 5.5h18v13H3z M3.5 6l8.5 7 8.5-7"/></svg>rsathishikumar3@gmail.com</a>
+      <a class="btn" href="https://linkedin.com/in/sat-this-h" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05a3.75 3.75 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>LinkedIn</a>
+      <a class="btn" href="https://github.com/Sathishr424" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>GitHub</a>
+      <a class="btn" href="../Sathish-Kumar-Resume.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M6 2.5h8l4 4v15H6z M14 2.5v4h4 M9 12h6 M9 16h6"/></svg>Resume (PDF)</a>
+    </div>
+  </div>
+  <div class="wrap legal">© 2026 Sathish Kumar. Client projects are shown with client details removed.</div>
+</footer>
+</body>
+</html>
