@@ -162,9 +162,6 @@ PROJECTS = [
                     "Test-first with Claude Code: each test was seen failing before the code was written. About 560 backend tests, 187 client unit tests and 92 Playwright end-to-end tests, including accessibility checks in light and dark mode.",
                     "A stub mode runs the whole suite without any models; smoke tests run against the real ones. With Cartesia on both ends, the first audio came 3.9 seconds after the last word.",
                     "Multi-stage Docker builds and Compose profiles for the local-GPU and cloud setups."]),
-            ("h", "Next"),
-            ("p", "A knowledge base of 3.9k+ interview questions with model answers, covering all 39 skills, is written and checked. "
-                  "The next step is retrieval (RAG), so the interviewer can draw on it."),
         ],
     },
     # ------------------------------------------------------------------ SatChat
@@ -291,9 +288,6 @@ PROJECTS = [
                     "The server keeps a log of operations by version. If other people edited since that version, it shifts the incoming edit's position past every newer insert and delete (operational transformation by index), applies it, bumps the version and broadcasts it.",
                     "Every client, the sender included, applies the server's ordered version, so everyone ends up with the same text. If someone else inserts above your cursor, your cursor moves with your text.",
                     "The server saves each document to disk at most once a second and caps how many people can join one document."]),
-            ("h", "Next"),
-            ("p", "Mapping between a screen row and a character position scans the lines today; the code is marked for an O(log n) "
-                  "version, which is the next step."),
         ],
     },
     # ------------------------------------------------------------------ Resume builder
