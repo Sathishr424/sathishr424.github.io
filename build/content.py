@@ -112,37 +112,59 @@ PROJECTS = [
         "cover": "mockai/cover-upwork.png",
         "tags": ["Python", "FastAPI", "WebSockets", "TypeScript", "Whisper", "Ollama", "Docker", "Playwright"],
         "skills": ["Python", "TypeScript", "React", "WebSockets", "Docker", "AI"],
-        "facts": [("Role", "Sole developer"), ("Time to first audio", "3–5 seconds"), ("Tests", "800+ automated")],
+        "facts": [("Role", "Sole developer"), ("Built", "Nov 2026"), ("Time to first audio", "3–5 seconds"),
+                  ("Tests", "800+ automated"), ("Runs on", "A 6 GB GPU or cloud APIs")],
         "links": [],
         "link_note": "Code walkthrough and demo available on request.",
         "body": [
             ("h", "The problem"),
-            ("p", "Reading interview questions is easy. Answering them out loud, under a little pressure, is not. "
-                  "Most practice tools are text chat, and they never show you <i>how</i> your answer could have been better."),
-            ("h", "What I built"),
-            ("p", "Mock AI runs three kinds of interview: a recruiter call, a technical round (you pick the role, level, skills "
-                  "and difficulty) and a behavioural round. The interviewer asks one question at a time, follows up when an "
-                  "answer is vague, and lets you talk over it. When it ends you get:"),
-            ("ul", ["a score out of 100 and a mark out of 10 for each of the round's criteria",
-                    "strengths, what to work on, and feedback under every answer in the transcript",
+            ("p", "Reading interview questions is easy. Answering them out loud, under a little pressure, is not. Most practice "
+                  "tools are text chat, and they never show you <i>how</i> your answer could have been better."),
+            ("h", "What it does"),
+            ("p", "Four modes from the home page: a recruiter call, a technical round, a behavioural round, and a sales call where "
+                  "the roles flip and the AI plays a prospect while you pitch your own offer. For a technical round you pick the "
+                  "role, level, difficulty and skills, from 39 skills in 7 groups."),
+            ("gallery", [("mockai/01-setup-technical-interview.png", "Set up a technical round."),
+                         ("mockai/02-equipment-check.png", "A microphone and speaker check before it starts.")]),
+            ("p", "The interviewer asks one question at a time, follows up when an answer is vague and stops talking the moment you "
+                  "talk over it. Asking it to explain a question doesn't use the question up, and, if that option is on, it can "
+                  "close the interview itself when you ask to stop or run out of time."),
+            ("gallery", [("mockai/04-live-question-and-answer.png", "The current question, live."),
+                         ("mockai/05-live-interview-transcript.png", "The transcript builds as you talk.")]),
+            ("h", "The report"),
+            ("ul", ["a score out of 100 and a mark out of 10 for each of the round's own criteria",
+                    "strengths, what to work on, and a note of two or three sentences under every answer",
                     "a stronger rewrite of one of your answers",
-                    "a recording of both voices, long pauses trimmed, that you can replay from any line or download"]),
-            ("img", "mockai/06-report-score-and-criteria.png", "The report: overall score, summary and per-criterion marks."),
+                    "a recording of both voices with the thinking gaps trimmed, playable from any line or downloadable as a <code>.wav</code>",
+                    "buttons to rewrite the whole report or only the notes, keeping the old version if the model fails"]),
+            ("gallery", [("mockai/06-report-score-and-criteria.png", "Score, summary and per-criterion marks."),
+                         ("mockai/07-report-strengths-and-stronger-answer.png", "Strengths and a stronger answer."),
+                         ("mockai/09-transcript-with-recording.png", "The recording, linked to each transcript line."),
+                         ("mockai/11-transcript-per-answer-feedback.png", "Feedback under every answer.")]),
             ("h", "How it works"),
-            ("p", "Audio streams over a single FastAPI WebSocket through voice detection, speech-to-text, the LLM interviewer "
-                  "and text-to-speech. Replies are spoken sentence by sentence as they're generated, so the first audio "
-                  "arrives in 3–5 seconds. Each stage sits behind an interface, so the same app runs fully local on a 6 GB GPU "
-                  "(Whisper, Chatterbox, Ollama) or on cloud APIs (Cartesia, Ollama Cloud) by changing configuration."),
+            ("p", "The browser streams the microphone to a FastAPI backend over one WebSocket. The backend decides when you've "
+                  "finished speaking, turns speech into text, has the language model write the reply and speaks it back sentence "
+                  "by sentence as it's generated. Every stage sits behind an interface, so each one runs locally or in the cloud "
+                  "by changing a setting:"),
+            ("ul", ["<b>Voice detection:</b> Silero, always on your machine",
+                    "<b>Speech to text:</b> Whisper through Hugging Face Transformers on the GPU, or Cartesia or ElevenLabs",
+                    "<b>The interviewer:</b> any model served by Ollama, locally or on Ollama Cloud",
+                    "<b>Text to speech:</b> Chatterbox on the GPU with its own voice for each round, or Cartesia, ElevenLabs, or Underdog Woof on the CPU"]),
+            ("p", "In the default local setup nothing is sent anywhere, and the recording never leaves the browser."),
             ("h", "The hard parts"),
             ("ul", ["<b>Turn-taking.</b> Telling when someone has finished speaking, not just paused to think, without cutting them off.",
-                    "<b>Interruptions.</b> When you speak over the interviewer, playback stops, and the conversation only keeps what you actually heard.",
-                    "<b>The recording.</b> Merging both voices into one timeline, trimming the thinking gaps, and linking each transcript line to its point in the audio. Audio never leaves the browser.",
-                    "<b>Useful scores from a small model.</b> Schema-validated JSON with one retry and per-round criteria on the server. In testing, strong interviews scored 75–88 and weak ones 13–20."]),
-            ("img", "mockai/09-transcript-with-recording.png", "The transcript with the recording and per-answer feedback."),
-            ("h", "Engineering"),
-            ("ul", ["Built test-first: about 560 backend tests, 187 client unit tests and 92 Playwright end-to-end tests, including accessibility checks",
-                    "A stub mode so the test suite runs without any models, plus smoke tests against real ones",
-                    "Multi-stage Docker builds and Compose profiles for the local-GPU and cloud setups"]),
+                    "<b>Interruptions.</b> When you talk over the interviewer, the screen and the model's memory keep only the words it actually said before you cut in.",
+                    "<b>The recording.</b> Merging both voices into one timeline, trimming the gaps, and linking each transcript line to its point in the audio, all in the browser.",
+                    "<b>Useful scores from a small model.</b> Schema-validated JSON with one retry and per-round criteria checked on the server. It returned a valid report in every test run, and strong interviews scored 75–88 while weak ones scored 13–20.",
+                    "<b>Prompts per round.</b> Each round has its own prompt and closing prompt on top of shared rules, so the model writes fresh questions from topics instead of reading a fixed list."]),
+            ("h", "How I built it"),
+            ("ul", ["Every feature started as a written plan and ended with a test log of what was checked and measured.",
+                    "Test-first with Claude Code: each test was seen failing before the code was written. About 560 backend tests, 187 client unit tests and 92 Playwright end-to-end tests, including accessibility checks in light and dark mode.",
+                    "A stub mode runs the whole suite without any models; smoke tests run against the real ones. With Cartesia on both ends, the first audio came 3.9 seconds after the last word.",
+                    "Multi-stage Docker builds and Compose profiles for the local-GPU and cloud setups."]),
+            ("h", "Next"),
+            ("p", "A knowledge base of 3.9k+ interview questions with model answers, covering all 39 skills, is written and checked. "
+                  "The next step is retrieval (RAG), so the interviewer can draw on it."),
         ],
     },
     # ------------------------------------------------------------------ SatChat
@@ -154,12 +176,48 @@ PROJECTS = [
         "cover": "satchat/cover-upwork.png",
         "tags": ["React", "TypeScript", "Node.js", "Express", "Socket.IO", "Redis", "PostgreSQL", "Prisma", "Kubernetes", "Jenkins"],
         "skills": ["React", "TypeScript", "Node.js", "WebSockets", "Redis", "Docker", "Kubernetes"],
-        "facts": [("Role", "Sole developer"), ("Services", "7 containers behind Nginx"), ("Deploy", "Docker Compose or Kubernetes")],
+        "facts": [("Role", "Sole developer"), ("Built", "Sep–Oct 2026"), ("Services", "7 containers behind Nginx"),
+                  ("Deploy", "Docker Compose or Kubernetes"), ("Cloud", "AWS, provisioned with Terraform")],
         "links": [("Live demo", "https://satdevopsdummies.xyz/"), ("Source on GitHub", "https://github.com/Sathishr424/ChatApp_plus_devops")],
         "body": [
             ("h", "What it is"),
             ("p", "A simplified Slack or Discord: one-to-one chats and group channels with live delivery, presence, typing "
-                  "indicators, read receipts, file sharing, GIFs, message search and email alerts. It works on desktop and mobile."),
+                  "indicators, read receipts, file sharing, GIFs, message search and email alerts. It works on desktop and mobile, "
+                  "and a live demo is running."),
+            ("gallery", [("satchat/screenshots/d02-group-chat-file-sharing.png", "A group chat with shared files."),
+                         ("satchat/screenshots/d05-direct-message-presence-typing.png", "Presence and typing in a direct message."),
+                         ("satchat/screenshots/d06-unread-badges-and-read-receipts.png", "Unread badges and read receipts."),
+                         ("satchat/screenshots/d08-message-search.png", "Search across messages.")]),
+            ("ul", ["<b>Accounts</b> with JWT sign-in and profiles",
+                    "<b>Groups</b> you create and name, plus one-to-one chats",
+                    "<b>Files and images</b> through their own storage service, and a GIF picker",
+                    "<b>Email alerts</b> sent by the backend's mail service"]),
+            ("h", "Jump to any search result in O(log n)"),
+            ("p", "This is the strongest piece of algorithm work in the project. Message search returns only the IDs of matching "
+                  "messages, newest first, a page at a time. When you step to a result that isn't loaded yet, the app has to "
+                  "bring in everything between what's on screen and that message. Loading page after page until it appears "
+                  "would take hundreds of requests in a long chat. Instead, the backend finds the message's exact position first:"),
+            ("ul", ["<b>Exponential (galloping) search.</b> From the edge of what's already loaded, it probes offsets 1, 2, 4, 8 and onwards, each probe a one-row query, until it passes the target message.",
+                    "<b>Binary search</b> inside that last range then finds the exact offset of the message.",
+                    "<b>One request</b> loads exactly the messages up to it, and the pagination state carries on from there, so scrolling back through older messages keeps working."]),
+            ("p", "For a message 10,000 messages back, that's about 28 one-row queries instead of 500 page loads. The same "
+                  "search works for direct chats and groups."),
+            ("h", "Everything loads lazily, through one hook"),
+            ("p", "Nothing in SatChat loads in full: the messages, the search results, the Recent, Unread and Groups lists, the "
+                  "people picker when you create a group, and GIF search all load a page at a time as you scroll. All of them use "
+                  "one generic React hook, <code>usePagination&lt;T&gt;</code>. Each list only supplies the function that fetches "
+                  "a page; the hook owns the cursor, \"has more\", the loading state, a guard against duplicate requests, and a "
+                  "400 ms debounced search that resets the list. Adding a new lazy list is a few lines."),
+            ("h", "Recent, Unread and Groups on the backend"),
+            ("ul", ["<b>One row does three jobs.</b> The unread table keeps, per conversation, the unread count, the latest message and the time of last activity. So the whole sidebar preview (last message, edited or deleted, GIF, attachment count, unread badge) comes from one query with joins, and unread counts are never counted from the messages.",
+                    "<b>Keyset pagination, not OFFSET.</b> The cursor is the pair (last activity, id), so pages stay stable while new messages arrive and a chat is never repeated or skipped. Contacts you've never messaged sort last and still page correctly.",
+                    "<b>People and groups in one list.</b> Recent and Unread run the people query and the groups query with the same cursor, merge the two sorted results by last activity and trim to the page size.",
+                    "<b>No total counts for paging.</b> Every query asks for one extra row; if it comes back, there's another page.",
+                    "<b>One query builder per kind.</b> People and groups each have a single SQL builder with composable WHERE parts for the cursor, unread-only and search, so Recent, Unread, Groups and all their searches are the same query with different filters."]),
+            ("h", "Code structure"),
+            ("ul", ["<b>Layered backend:</b> controllers, services and repositories, with request DTOs validated by middleware before a handler runs, response DTOs shaping what goes out, and typed exceptions turned into HTTP errors in one place.",
+                    "<b>Shared domain code:</b> the REST API and the socket server import the same models, DTOs and Redis connection from one shared package.",
+                    "<b>Typed pub/sub on the client:</b> one message system fans socket events (new, edited, deleted and seen messages, typing, presence) out to subscribers, so components react to events without touching the socket."]),
             ("img", "satchat/realtime-details.png", "The details that make chat feel live."),
             ("h", "How it's built"),
             ("img", "satchat/architecture.png", "Seven containers, four written for this project, behind Nginx."),
@@ -168,13 +226,15 @@ PROJECTS = [
                     "<b>Presence that survives many tabs.</b> Each user has a set of live socket IDs in Redis; they go offline only when the last one disconnects, and only that final disconnect writes \"last seen\" to Postgres.",
                     "<b>Persist, then broadcast.</b> A message is saved before anyone hears about it, so the database defines the order.",
                     "<b>Unread counts stored, not counted.</b> Sending increments a counter and opening the chat resets it, so the sidebar never counts rows.",
+                    "<b>A schema that evolved safely.</b> PostgreSQL through Prisma, changed over 28 migrations.",
                     "<b>Build once, deploy anywhere.</b> The client reads its URLs at container start, so one image runs in every environment."]),
             ("img", "satchat/presence-across-devices.png", "Presence stays correct across tabs and devices."),
             ("h", "Shipping it"),
-            ("ul", ["Docker Compose for the full stack locally or on one VM",
-                    "Helm charts per component, with autoscaling for the API, socket, storage and client tiers",
-                    "Jenkins pipelines that build and push images, then deploy to a VM or a Kubernetes cluster provisioned with Terraform",
-                    "<code>/health</code> and <code>/ready</code> checks on every service, Nginx with SSL in front"]),
+            ("p", "There are two ways to deploy it, each with its own Jenkins pipeline that builds and pushes the images first:"),
+            ("ul", ["<b>One VM:</b> Terraform creates an AWS EC2 instance and Docker Compose runs the whole stack on it.",
+                    "<b>A Kubernetes cluster:</b> Terraform creates a control-plane node and two workers on EC2, and scripts set them up with kubeadm and Calico and join the workers.",
+                    "<b>Helm:</b> seven charts, one per component. The API, socket, storage and client tiers autoscale with Horizontal Pod Autoscalers.",
+                    "<code>/health</code> and <code>/ready</code> checks on every service, and Nginx with SSL in front."]),
             ("img", "satchat/features-mobile.png", "On mobile."),
         ],
     },
@@ -225,30 +285,34 @@ PROJECTS = [
         "cover": "resume-builder/light/cover-upwork.png",
         "tags": ["TypeScript", "No UI framework", "Vite", "Tailwind CSS", "React (templates)"],
         "skills": ["TypeScript", "React"],
-        "facts": [("Role", "Sole developer"), ("Templates", "4, more on the way"), ("Section types", "15")],
+        "facts": [("Role", "Sole developer"), ("Built", "Nov 2026"), ("Templates", "4, more on the way"),
+                  ("Section types", "15")],
         "links": [],
         "link_note": "Code walkthrough available on request.",
         "body": [
             ("h", "The problem"),
-            ("p", "Most resume builders hide the PDF behind a sign-up, or show the result only after you finish the form. "
-                  "I wanted one where you see the real page while you type and can download it straight away, with no account."),
+            ("p", "Most resume builders hide the PDF behind a sign-up, or show the result only after you finish the form. I wanted one "
+                  "where you see the real page while you type and can download it straight away, with no account."),
             ("h", "What it does"),
             ("ul", ["<b>Editor</b> for 15 section types: employment, education, projects, skills with a level slider, languages, links, certificates, custom sections and more. Sections and the entries inside them can be dragged into order, renamed and deleted.",
                     "<b>Live preview</b> of an A4 page beside the form, scaled to fit, in one of four templates.",
                     "<b>PDF export</b> through an A4 print window with margins repeated on every page, so long resumes break cleanly.",
-                    "<b>Autosave</b> to local storage a second after you stop typing, plus JSON export and import.",
+                    "<b>Autosave</b> to local storage a second after you stop typing, plus JSON export and import, so nothing needs a server or an account.",
                     "<b>Phones</b> get Edit and Preview tabs, and there's a light and dark theme."]),
             ("img", "resume-builder/light/editing.png", "The form and the A4 page stay in sync."),
-            ("h", "Templates are pluggable"),
-            ("img", "resume-builder/light/templates.png", "Four templates, one set of data."),
+            ("img", "resume-builder/light/screenshots/builder-add-section.png", "Add any of the 15 section types, then drag it into place."),
+            ("h", "Four templates, one resume"),
+            ("p", "Switching templates never touches your data: the same resume renders in each one, and the preview updates at once."),
+            ("img", "resume-builder/light/templates.png", "Four templates, one set of data, and the 15 section types every template supports."),
             ("p", "Each template is a single React component file. Adding one means creating the file and registering it in the "
                   "template list; it then appears in the gallery and renders the same resume data. More templates are on the way."),
             ("h", "How it's built"),
             ("img", "resume-builder/light/how-it-works.png", "Plain TypeScript classes; React only renders templates to static HTML."),
-            ("p", "There's no UI framework. Each section is a TypeScript class on a shared <code>Draggable</code> base that handles the "
-                  "drag handle, drop placeholder, reordering and delete. Every edit notifies a pub/sub manager that debounces to one "
-                  "refresh a second after typing stops; the store saves the resume as JSON and the preview re-renders the chosen "
-                  "template with React's <code>renderToStaticMarkup</code>. A small router serves the gallery, the builder and a 404 page."),
+            ("p", "There's no UI framework. Each section is a TypeScript class on a shared <code>Draggable</code> base that handles "
+                  "the drag handle, drop placeholder, reordering and delete. Every edit notifies a pub/sub manager that debounces to "
+                  "one refresh a second after typing stops; the store saves the resume as JSON and the preview re-renders the "
+                  "chosen template with React's <code>renderToStaticMarkup</code>. The print window gets that same HTML, so the PDF "
+                  "matches the preview. A small router serves the gallery, the builder and a 404 page."),
         ],
     },
     # ------------------------------------------------------------------ Scraping
@@ -260,24 +324,34 @@ PROJECTS = [
         "cover": "scraping/cover-upwork.png",
         "tags": ["Python", "Selenium", "undetected-chromedriver", "BeautifulSoup", "Proxies", "pandas"],
         "skills": ["Python", "Scraping"],
-        "facts": [("Stores", "51"), ("Products", "300k+"), ("Largest store", "77k+ products")],
+        "facts": [("Stores", "51"), ("Products", "300k+"), ("Largest store", "77k+ products"),
+                  ("Delivered as", "CSV and Excel"), ("Since", "2022")],
         "links": [],
         "body": [
             ("h", "The problem"),
-            ("p", "Retailers, resellers and catalog teams needed product data from other stores: whole catalogs with prices, specs "
-                  "and images, in a format they could import. Copying it by hand would take months, and every site is built differently."),
+            ("p", "Retailers, resellers and catalog teams needed product data from other stores: whole catalogs with prices, specs and "
+                  "images, in a format they could import. Copying it by hand would take months, and every site is built differently."),
             ("h", "What I built"),
-            ("p", "A custom Python scraper for each store:"),
+            ("p", "A custom scraper for each store, from big retailers like Lowe's, Menards, Northern Tool and Acme Tools down to small brand sites:"),
             ("ul", ["<b>Finding products</b> by walking category pages or sitemaps, or from the client's own URL or SKU list.",
-                    "<b>Fetching pages</b> with Requests and BeautifulSoup for static sites, and Selenium with undetected Chrome for dynamic sites, infinite scroll, reCAPTCHA and heavily protected stores. Threads, proxies and rotating user agents kept big runs fast, and failed URLs were logged and retried.",
+                    "<b>Fetching pages</b> with Requests and BeautifulSoup for static sites, and a real browser for dynamic sites, infinite scroll, reCAPTCHA and heavily protected stores. Threads, proxies and rotating user agents kept big runs fast, and failed URLs were logged and retried.",
                     "<b>Extracting fields:</b> titles, SKUs, brands, categories, prices, sale prices and rebates, options, stock, shipping, specs as clean HTML, manuals, videos and images.",
                     "<b>Delivering</b> CSV or Excel files in the client's column format, with images downloaded and named to match."]),
             ("img", "scraping/stores-scraped.png", "51 stores, up to 77k+ products from one."),
-            ("h", "Scale"),
-            ("p", "The largest jobs were 77k+ products from one tools retailer, 56k+ and 38k+ from others, and 140k+ product URLs "
-                  "crawled on a single site. The smallest were brand sites with under 100 products."),
-            ("img", "scraping/sample-outputs.png", "Real output files, first rows only."),
+            ("h", "The toolkit"),
+            ("ul", ["<b>Static pages:</b> Python with Requests, cloudscraper and BeautifulSoup",
+                    "<b>Dynamic and protected pages:</b> Selenium, SeleniumBase, undetected-chromedriver, selenium-wire and Playwright, plus Puppeteer in Node.js for some stores",
+                    "<b>Speed and reliability:</b> concurrent.futures threads, rotating proxies, fake-useragent, logged and retried failures",
+                    "<b>Output:</b> pandas and openpyxl, shaped to each client's import format"]),
             ("img", "scraping/how-it-works.png", "The pipeline, the fields delivered and the toolkit."),
+            ("h", "Hard cases"),
+            ("ul", ["<b>Rebates.</b> Menards shows an everyday price, a rebate and a price after rebate, and some prices only appear in the cart. Each became its own column, kept exactly as the store shows it.",
+                    "<b>Huge crawls.</b> Northern Tool took 140k+ product URLs to crawl, which came down to 14k+ unique products once duplicates were removed.",
+                    "<b>Bot protection.</b> Undetected Chrome, CAPTCHA handling, proxies and rotating user agents for the stores that block ordinary scrapers."]),
+            ("h", "Scale"),
+            ("p", "The largest jobs were 77k+ products from one tools retailer, 56k+ and 38k+ from others, and 140k+ product URLs crawled "
+                  "on a single site. The smallest were brand sites with under 100 products."),
+            ("img", "scraping/sample-outputs.png", "Real output files, first rows only."),
         ],
     },
     # ------------------------------------------------------------------ Price tracker
@@ -387,7 +461,7 @@ SKILL_PROOF = {
     "System Design (HLD, LLD)": ["satchat"],
     "Distributed Systems": ["satchat"],
     "Database Design": ["satchat"],
-    "Data Structures & Algorithms": ["text-editor-engine", "leetcode"],
+    "Data Structures & Algorithms": ["text-editor-engine", "satchat", "leetcode"],
     "LeetCode Guardian (Max Rating 2144)": ["leetcode"],
     "Selenium": ["ecommerce-scraping"],
     "BeautifulSoup": ["ecommerce-scraping"],
@@ -408,6 +482,7 @@ CP = {
         ("2,100+", "problems solved, all in a public repo"),
     ],
     "where": [
+        "<b>SatChat:</b> exponential and binary search over a conversation, so jumping to any search result takes O(log n) one-row queries instead of loading page after page.",
         "<b>Text editor engine:</b> a linked-list text model so edits at the cursor cost O(1) however long the document is.",
         "<b>Pando:</b> a stacking constraint added to a truck-loading optimization engine while keeping its existing optimization behavior.",
         "<b>Price tracker:</b> daily, 30-day and all-time lows and sale runs worked out from every stored price snapshot.",

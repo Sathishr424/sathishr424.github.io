@@ -344,6 +344,15 @@ def build_project(i, p):
             ip, iw, ih = image(p["slug"], block[1])
             cap = f"<figcaption>{esc(block[2])}</figcaption>" if len(block) > 2 and block[2] else ""
             body.append(f'<figure class="fig">{img_tag(ip, iw, ih, block[2] if len(block) > 2 else p["title"], prefix)}{cap}</figure>')
+        elif kind == "gallery":
+            opts = block[2] if len(block) > 2 else {}
+            items = []
+            for src, cap in block[1]:
+                ip, iw, ih = image(p["slug"], src)
+                items.append(f'<figure><a href="{prefix}{ip}" target="_blank" rel="noopener">'
+                             f'{img_tag(ip, iw, ih, cap, prefix)}</a><figcaption>{esc(cap)}</figcaption></figure>')
+            cls = f'gallery cols-{opts.get("cols", 2)}' + (" narrow" if opts.get("narrow") else "")
+            body.append(f'<div class="{cls}">{"".join(items)}</div>')
         elif kind == "note":
             body.append(f'<p class="note">{block[1]}</p>')
 
