@@ -18,6 +18,7 @@ SITE = {
     "email": "rsathishikumar3@gmail.com",
     "github": "https://github.com/Sathishr424",
     "linkedin": "https://linkedin.com/in/sat-this-h",
+    "upwork": "https://www.upwork.com/freelancers/~01b87d2baf21208fc5",
     "resume_pdf": "Sathish-Kumar-Resume.pdf",
     "resume_source": "/home/sathish/Documents/Sathish Resume 21th Nov 2026.pdf",
     "headline": "I build web apps, real‑time systems and the data pipelines behind them.",
