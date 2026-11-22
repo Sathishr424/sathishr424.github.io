@@ -36,6 +36,8 @@ SITE = {
         "I'm looking for a full-stack or backend role on a product team, working on real-time "
         "systems, data pipelines or AI-powered features. I also take freelance projects."
     ),
+    # Skill chips above the projects; each project's "skills" list decides which chips light it up.
+    "filters": ["Python", "TypeScript", "React", "Vue.js", "Node.js", "WebSockets", "Redis", "Docker", "Kubernetes", "Laravel", "MySQL", "Scraping", "Canvas", "AI"],
     "stats": [
         ("5 yrs", "building and shipping software"),
         ("90+", "client projects delivered"),
@@ -96,6 +98,7 @@ PROJECTS = [
         "kind": "Personal project", "kind_key": "personal", "year": "2026", "featured": True,
         "cover": "mockai/cover-upwork.png",
         "tags": ["Python", "FastAPI", "WebSockets", "TypeScript", "Whisper", "Ollama", "Docker", "Playwright"],
+        "skills": ["Python", "TypeScript", "React", "WebSockets", "Docker", "AI"],
         "facts": [("Role", "Sole developer"), ("Time to first audio", "3–5 seconds"), ("Tests", "800+ automated")],
         "links": [],
         "link_note": "Code walkthrough and demo available on request.",
@@ -137,6 +140,7 @@ PROJECTS = [
         "kind": "Personal project", "kind_key": "personal", "year": "2026", "featured": True,
         "cover": "satchat/cover-upwork.png",
         "tags": ["React", "TypeScript", "Node.js", "Socket.IO", "Redis", "PostgreSQL", "Kubernetes", "Jenkins"],
+        "skills": ["React", "TypeScript", "Node.js", "WebSockets", "Redis", "Docker", "Kubernetes"],
         "facts": [("Role", "Sole developer"), ("Services", "7 containers behind Nginx"), ("Deploy", "Docker Compose or Kubernetes")],
         "links": [("Live demo", "https://satdevopsdummies.xyz/"), ("Source on GitHub", "https://github.com/Sathishr424/ChatApp_plus_devops")],
         "body": [
@@ -169,6 +173,7 @@ PROJECTS = [
         "kind": "Personal project", "kind_key": "personal", "year": "2025",
         "cover": "text-editor-engine/01-cover.png",
         "tags": ["TypeScript", "HTML Canvas", "Data structures", "Dependency injection", "Pub/sub"],
+        "skills": ["TypeScript", "Canvas"],
         "facts": [("Role", "Sole developer"), ("Core libraries", "None"), ("Next", "Real-time collaboration")],
         "links": [("Source on GitHub", "https://github.com/Sathishr424/DistributedRealTimeCollaborativeDocumentEditor")],
         "body": [
@@ -206,6 +211,7 @@ PROJECTS = [
         "kind": "Personal project", "kind_key": "personal", "year": "2026",
         "cover": "resume-builder/light/cover-upwork.png",
         "tags": ["TypeScript", "No UI framework", "Vite", "Tailwind CSS", "React (templates)"],
+        "skills": ["TypeScript", "React"],
         "facts": [("Role", "Sole developer"), ("Templates", "4, more on the way"), ("Section types", "15")],
         "links": [],
         "link_note": "Code walkthrough available on request.",
@@ -240,6 +246,7 @@ PROJECTS = [
         "kind": "Client work", "kind_key": "client", "year": "2022 – now",
         "cover": "scraping/cover-upwork.png",
         "tags": ["Python", "Selenium", "undetected-chromedriver", "BeautifulSoup", "Proxies", "pandas"],
+        "skills": ["Python", "Scraping"],
         "facts": [("Stores", "51"), ("Products", "300k+"), ("Largest store", "77k+ products")],
         "links": [],
         "body": [
@@ -268,6 +275,7 @@ PROJECTS = [
         "kind": "Client work · NDA", "kind_key": "client", "year": "2023 – 2024",
         "cover": "ecommerce-price-tracker/cover-upwork.png",
         "tags": ["Vue.js", "Laravel", "MySQL", "Bootstrap", "Scraping", "Cron"],
+        "skills": ["Vue.js", "Laravel", "MySQL", "Scraping"],
         "facts": [("Role", "Most of the UI and backend, ~90% of scrapers"), ("Retailers", "6 major US stores"), ("Status", "Still live")],
         "links": [],
         "body": [
@@ -299,6 +307,7 @@ PROJECTS = [
         "kind": "Client work · NDA", "kind_key": "client", "year": "Freelance",
         "cover": "custom-order-builder/cover-upwork.png",
         "tags": ["Laravel", "PHP", "MySQL", "JavaScript", "Shopify checkout"],
+        "skills": ["Laravel", "MySQL"],
         "facts": [("Role", "Builder, pricing engine, backend and admin"), ("Pricing", "10 quantity tiers"), ("Checkout", "Shopify")],
         "links": [],
         "body": [

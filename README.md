@@ -1,14 +1,15 @@
 # Portfolio site
 
-Static site: plain HTML and CSS, no framework, no build step needed to host it.
+Static site: plain HTML, CSS and a small vanilla JS file, no framework, no build step needed to host it. Dark theme with an interactive dot-grid hero, a skill filter on the projects, and a Ctrl+K palette to jump anywhere.
 
 - `index.html`: home page (intro, projects, experience, skills, contact)
 - `projects/*.html`: one case study per project
-- `assets/`: stylesheet, favicon, and WebP images
+- `assets/`: `site.css` (styles), `site.js` (interactions), favicon, and WebP images
+- `design/`: the design concepts and samples from choosing the look (not published; it's in `.gitignore`)
 - `Sathish-Kumar-Resume.pdf`: the resume linked from the site
 - `build/`: the generator. Edit text in `build/content.py`, then run `python3 build/build.py` (needs Pillow). It copies images from `../Portfolio/projects` and the PDF from `../resume`.
 
-Light and dark mode follow the visitor's system setting. Works from 320px wide up.
+Works from 320px wide up, by keyboard, and with reduced motion (no typing or moving dots).
 
 ## Preview locally
 

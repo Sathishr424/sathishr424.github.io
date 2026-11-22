@@ -4,8 +4,10 @@
 Run:  python3 build/build.py
 It writes index.html, projects/*.html and assets/img/** (WebP copies of the
 images in ../Portfolio/projects). Edit the content in content.py, then re-run.
+Styles live in assets/site.css and interactions in assets/site.js.
 """
 import html
+import json
 import shutil
 import sys
 from pathlib import Path
@@ -26,7 +28,7 @@ def esc(s):
 
 
 # ---------------------------------------------------------------- images
-def image(slug, src, alt_w=None):
+def image(slug, src):
     """Convert ../Portfolio/projects/<src> to assets/img/<slug>/<name>.webp.
     Returns (relative path from site root, width, height)."""
     src_path = SRC / src
@@ -42,13 +44,10 @@ def image(slug, src, alt_w=None):
     return f"assets/img/{slug}/{name}", w, h
 
 
-def img_tag(path, w, h, alt, prefix="", cls="", lazy=True, sizes=None):
-    attrs = [f'src="{prefix}{path}"', f'width="{w}"', f'height="{h}"', f'alt="{esc(alt)}"']
+def img_tag(path, w, h, alt, prefix="", lazy=True):
+    attrs = [f'src="{prefix}{path}"', f'width="{w}"', f'height="{h}"', f'alt="{esc(alt)}"', 'decoding="async"']
     if lazy:
         attrs.append('loading="lazy"')
-    attrs.append('decoding="async"')
-    if cls:
-        attrs.append(f'class="{cls}"')
     return f"<img {' '.join(attrs)}>"
 
 
@@ -59,9 +58,29 @@ ICONS = {
     "mail": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M3 5.5h18v13H3z M3.5 6l8.5 7 8.5-7"/></svg>',
     "file": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M6 2.5h8l4 4v15H6z M14 2.5v4h4 M9 12h6 M9 16h6"/></svg>',
     "ext": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M14 4h6v6 M20 4l-9 9 M18 14v6H4V6h6"/></svg>',
-    "arrow": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M5 12h14 M13 6l6 6-6 6"/></svg>',
+    "search": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M10.5 3.5a7 7 0 1 1 0 14 7 7 0 0 1 0-14z M15.5 15.5 21 21"/></svg>',
     "back": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M19 12H5 M11 6l-6 6 6 6"/></svg>',
+    "next": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M5 12h14 M13 6l6 6-6 6"/></svg>',
 }
+
+
+def nav_data(prefix, home):
+    """Entries for the Ctrl+K palette, with URLs relative to the current page."""
+    h = "" if home else f"{prefix}index.html"
+    items = [
+        {"t": "Work", "k": "Section", "u": f"{h}#work"},
+        {"t": "Experience", "k": "Section", "u": f"{h}#experience"},
+        {"t": "Skills", "k": "Section", "u": f"{h}#skills"},
+        {"t": "Contact", "k": "Section", "u": "#contact"},
+    ]
+    items += [{"t": p["title"], "k": p["kind"], "u": f"{prefix}projects/{p['slug']}.html"} for p in PROJECTS]
+    items += [
+        {"t": "Resume (PDF)", "k": "Link", "u": f"{prefix}{SITE['resume_pdf']}", "x": 1},
+        {"t": "GitHub", "k": "Link", "u": SITE["github"], "x": 1},
+        {"t": "LinkedIn", "k": "Link", "u": SITE["linkedin"], "x": 1},
+        {"t": "Email me", "k": "Link", "u": f"mailto:{SITE['email']}"},
+    ]
+    return json.dumps(items)
 
 
 def head(title, description, prefix, og_image, path):
@@ -80,125 +99,145 @@ def head(title, description, prefix, og_image, path):
 <meta property="og:url" content="{esc(url)}">
 <meta property="og:image" content="{esc(SITE['url'].rstrip('/') + '/' + og_image)}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0f1e">
 <link rel="icon" href="{prefix}assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{prefix}assets/site.css">
+<script defer src="{prefix}assets/site.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 """
 
 
-def nav(prefix, home=False):
+def header(prefix, home=False):
     h = "" if home else f"{prefix}index.html"
-    return f"""<header class="top">
+    return f"""<header class="top" id="top">
   <div class="wrap top-in">
-    <a class="brand" href="{prefix}index.html" aria-label="{esc(SITE['name'])}, home"><span class="mark">SK</span><span class="brand-name">{esc(SITE['name'])}</span></a>
-    <nav aria-label="Main">
-      <a href="{h}#work">Work</a>
-      <a href="{h}#experience">Experience</a>
-      <a href="{h}#contact">Contact</a>
-      <a class="nav-cta" href="{prefix}{SITE['resume_pdf']}" target="_blank" rel="noopener">Resume</a>
+    <a class="brand" href="{prefix}index.html" aria-label="{esc(SITE['name'])}, home"><span class="mark">SK</span>{esc(SITE['name'])}</a>
+    <nav class="nav" aria-label="Main">
+      <a href="{h}#work">Work</a><a href="{h}#experience">Experience</a><a href="{h}#skills">Skills</a><a href="#contact">Contact</a>
+      <a href="{prefix}{SITE['resume_pdf']}" target="_blank" rel="noopener">Resume</a>
     </nav>
+    <button class="kbtn" type="button" data-palette aria-haspopup="dialog">{ICONS['search']}<span>Jump to…</span><kbd>Ctrl K</kbd></button>
   </div>
 </header>
 """
 
 
-def footer(prefix):
-    return f"""<footer class="foot" id="contact">
-  <div class="wrap foot-in">
+def palette(prefix, home):
+    return f"""<div class="pal" id="pal" role="dialog" aria-modal="true" aria-label="Jump to" hidden>
+  <div class="pal-box">
+    <input id="pal-in" type="text" placeholder="Search projects, sections and links" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="pal-list">
+    <ul id="pal-list" role="listbox" aria-label="Results"></ul>
+    <p class="pal-hint"><kbd>↑</kbd><kbd>↓</kbd> to move <kbd>Enter</kbd> to open <kbd>Esc</kbd> to close</p>
+  </div>
+</div>
+<script id="nav-data" type="application/json">{nav_data(prefix, home)}</script>
+"""
+
+
+def footer(prefix, home=False):
+    return f"""<div class="wrap">
+  <section class="contact" id="contact" aria-labelledby="contact-h">
     <div>
-      <p class="eyebrow">Contact</p>
-      <h2 class="foot-title">Open to full-stack and backend roles.</h2>
-      <p class="foot-sub">{esc(SITE['looking_for'])}</p>
+      <h2 id="contact-h">Open to full-stack and backend roles.</h2>
+      <p>{esc(SITE['looking_for'])}</p>
     </div>
-    <div class="foot-links">
+    <div class="cta">
       <a class="btn btn-primary" href="mailto:{SITE['email']}">{ICONS['mail']}{esc(SITE['email'])}</a>
       <a class="btn" href="{SITE['linkedin']}" target="_blank" rel="noopener">{ICONS['linkedin']}LinkedIn</a>
       <a class="btn" href="{SITE['github']}" target="_blank" rel="noopener">{ICONS['github']}GitHub</a>
       <a class="btn" href="{prefix}{SITE['resume_pdf']}" target="_blank" rel="noopener">{ICONS['file']}Resume (PDF)</a>
     </div>
-  </div>
-  <div class="wrap legal">© {SITE['year']} {esc(SITE['name'])}. Client projects are shown with client details removed.</div>
-</footer>
-</body>
+  </section>
+</div>
+<footer class="foot"><div class="wrap">© {SITE['year']} {esc(SITE['name'])}. Client projects are shown with client details removed.<span class="foot-k"> Press <kbd>Ctrl K</kbd> to jump anywhere.</span></div></footer>
+{palette(prefix, home)}</body>
 </html>
 """
 
 
+def chips(skills):
+    return '<ul class="chips">' + "".join(f'<li data-skill="{esc(s)}">{esc(s)}</li>' for s in skills) + "</ul>"
+
+
 # ---------------------------------------------------------------- pages
-def card(p, featured=False):
+def card(p, i):
     path, w, h = p["_cover"]
-    tags = "".join(f"<li>{esc(t)}</li>" for t in p["tags"][:5])
-    cls = "card card-featured" if featured else "card"
-    return f"""<a class="{cls}" href="projects/{p['slug']}.html">
-  <div class="card-img">{img_tag(path, w, h, p['title'] + ' cover', lazy=not featured)}</div>
+    size = "c-wide" if i < 2 or i >= len(PROJECTS) - 2 else "c-third"
+    return f"""<a class="card {size}" href="projects/{p['slug']}.html" data-skills="{esc('|'.join(p['skills']))}">
+  <div class="card-img">{img_tag(path, w, h, p['title'] + ' cover', lazy=i >= 2)}</div>
   <div class="card-body">
-    <p class="card-kind"><span class="dot dot-{p['kind_key']}"></span>{esc(p['kind'])} · {esc(p['year'])}</p>
+    <p class="kind kind-{p['kind_key']}">{esc(p['kind'])} · {esc(p['year'])}</p>
     <h3>{esc(p['title'])}</h3>
     <p class="card-line">{esc(p['tagline'])}</p>
-    <ul class="tags">{tags}</ul>
-    <span class="card-go">Read case study {ICONS['arrow']}</span>
+    {chips(p['skills'])}
   </div>
 </a>"""
 
 
+def job(e, i):
+    pts = "".join(f"<li>{esc(x)}</li>" for x in e["points"])
+    now = '<span class="now"><span class="live" aria-hidden="true"></span>Current</span>' if "Present" in e["when"] else ""
+    return f"""<article class="job">
+  <div class="job-meta">
+    <p class="when">{esc(e['when'])}{now}</p>
+    <h3>{esc(e['role'])}</h3>
+    <p class="at">{esc(e['where'])}</p>
+  </div>
+  <ul>{pts}</ul>
+</article>"""
+
+
 def build_index():
-    personal = [p for p in PROJECTS if p["kind_key"] == "personal"]
-    client = [p for p in PROJECTS if p["kind_key"] == "client"]
     stats = "".join(f'<div class="stat"><b>{esc(n)}</b><span>{esc(l)}</span></div>' for n, l in SITE["stats"])
-    exp = "".join(
-        f"""<li class="exp">
-  <div class="exp-when">{esc(e['when'])}</div>
-  <div class="exp-what"><h3>{esc(e['role'])}</h3><p class="exp-where">{esc(e['where'])}</p><ul>{''.join(f"<li>{esc(x)}</li>" for x in e['points'])}</ul></div>
-</li>""" for e in EXPERIENCE)
-    skills = "".join(f"<div class=\"skill\"><h3>{esc(k)}</h3><p>{esc(v)}</p></div>" for k, v in SKILLS)
+    filters = '<button type="button" class="on" aria-pressed="true" data-f="all">All</button>' + "".join(
+        f'<button type="button" aria-pressed="false" data-f="{esc(f)}">{esc(f)}</button>' for f in SITE["filters"])
+    skills = "".join(f'<div class="skill"><h3>{esc(k)}</h3><p>{esc(v)}</p></div>' for k, v in SKILLS)
 
     out = head(f"{SITE['name']} · {SITE['role']}", SITE["meta_description"], "", PROJECTS[0]["_cover"][0], "")
-    out += nav("", home=True)
+    out += header("", home=True)
     out += f"""<main id="main">
-<section class="hero wrap">
-  <p class="eyebrow">{esc(SITE['role'])} · {esc(SITE['location'])}</p>
-  <h1>{SITE['headline']}</h1>
-  <p class="lede">{esc(SITE['intro'])}</p>
-  <div class="hero-cta">
-    <a class="btn btn-primary" href="#work">See my work {ICONS['arrow']}</a>
-    <a class="btn" href="{SITE['resume_pdf']}" target="_blank" rel="noopener">{ICONS['file']}Resume</a>
-    <a class="btn btn-icon" href="{SITE['github']}" target="_blank" rel="noopener" aria-label="GitHub">{ICONS['github']}</a>
-    <a class="btn btn-icon" href="{SITE['linkedin']}" target="_blank" rel="noopener" aria-label="LinkedIn">{ICONS['linkedin']}</a>
-    <a class="btn btn-icon" href="mailto:{SITE['email']}" aria-label="Email">{ICONS['mail']}</a>
+<section class="hero" aria-labelledby="hero-h">
+  <canvas id="dots" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <p class="who"><span class="live" aria-hidden="true"></span>{esc(SITE['role'])} · {esc(SITE['location'])}</p>
+    <h1 id="hero-h" data-type>{esc(SITE['headline'])}</h1>
+    <p class="lede">{esc(SITE['intro'])}</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#work">See my work</a>
+      <a class="btn" href="{SITE['resume_pdf']}" target="_blank" rel="noopener">{ICONS['file']}Resume</a>
+      <a class="btn" href="{SITE['github']}" target="_blank" rel="noopener">{ICONS['github']}GitHub</a>
+      <a class="btn" href="{SITE['linkedin']}" target="_blank" rel="noopener">{ICONS['linkedin']}LinkedIn</a>
+      <a class="btn" href="mailto:{SITE['email']}">{ICONS['mail']}Email</a>
+    </div>
+    <div class="stats">{stats}</div>
   </div>
-  <div class="stats">{stats}</div>
 </section>
 
 <section class="section wrap" id="work" aria-labelledby="work-h">
-  <div class="sec-head"><p class="eyebrow">Selected work</p><h2 id="work-h">Projects</h2>
-  <p class="sec-sub">Each project has a short case study: the problem, what I built, and the engineering behind it.</p></div>
-  <h3 class="group-h"><span class="dot"></span>Personal projects <span>designed and built end to end, on my own</span></h3>
-  <div class="grid-featured">{''.join(card(p, i < 2) for i, p in enumerate(personal))}</div>
-  <h3 class="group-h"><span class="dot dot-client"></span>Client work <span>freelance, with client names and data removed</span></h3>
-  <div class="grid">{''.join(card(p) for p in client)}</div>
+  <div class="sec-head"><h2 id="work-h">Selected work</h2><p>Pick a skill to see where I've used it. Each project opens a short case study.</p></div>
+  <div class="filters" role="group" aria-label="Filter projects by skill">{filters}</div>
+  <p class="filter-note" id="filter-note" aria-live="polite"></p>
+  <div class="grid" id="grid">{''.join(card(p, i) for i, p in enumerate(PROJECTS))}</div>
 </section>
 
 <section class="section wrap" id="experience" aria-labelledby="exp-h">
-  <div class="two">
-    <div>
-      <div class="sec-head"><p class="eyebrow">Experience</p><h2 id="exp-h">Where I've worked</h2></div>
-      <ol class="exps">{exp}</ol>
-    </div>
-    <div>
-      <div class="sec-head"><p class="eyebrow">Toolkit</p><h2>Skills</h2></div>
-      <div class="skills">{skills}</div>
-    </div>
-  </div>
+  <div class="sec-head"><h2 id="exp-h">Experience</h2></div>
+  <div class="jobs">{''.join(job(e, i) for i, e in enumerate(EXPERIENCE))}</div>
+</section>
+
+<section class="section wrap" id="skills" aria-labelledby="skills-h">
+  <div class="sec-head"><h2 id="skills-h">Skills</h2></div>
+  <div class="skills">{skills}</div>
 </section>
 </main>
 """
-    out += footer("")
+    out += footer("", home=True)
     (ROOT / "index.html").write_text(out)
 
 
@@ -211,7 +250,6 @@ def build_project(i, p):
     if p.get("link_note"):
         links += f'<span class="link-note">{esc(p["link_note"])}</span>'
     facts = "".join(f"<div><dt>{esc(k)}</dt><dd>{esc(v)}</dd></div>" for k, v in p["facts"])
-    tags = "".join(f"<li>{esc(t)}</li>" for t in p["tags"])
 
     body = []
     for block in p["body"]:
@@ -225,8 +263,7 @@ def build_project(i, p):
         elif kind == "img":
             ip, iw, ih = image(p["slug"], block[1])
             cap = f"<figcaption>{esc(block[2])}</figcaption>" if len(block) > 2 and block[2] else ""
-            wide = " wide" if iw / ih > 1.2 else ""
-            body.append(f'<figure class="fig{wide}">{img_tag(ip, iw, ih, block[2] if len(block) > 2 else p["title"], prefix)}{cap}</figure>')
+            body.append(f'<figure class="fig">{img_tag(ip, iw, ih, block[2] if len(block) > 2 else p["title"], prefix)}{cap}</figure>')
         elif kind == "note":
             body.append(f'<p class="note">{block[1]}</p>')
 
@@ -234,27 +271,27 @@ def build_project(i, p):
     next_p = PROJECTS[(i + 1) % len(PROJECTS)]
 
     out = head(f"{p['title']} · {SITE['name']}", p["tagline"], prefix, path, f"projects/{p['slug']}.html")
-    out += nav(prefix)
+    out += header(prefix)
     out += f"""<main id="main" class="proj">
 <div class="wrap">
   <a class="back" href="../index.html#work">{ICONS['back']}All projects</a>
   <header class="proj-head">
-    <p class="card-kind"><span class="dot dot-{p['kind_key']}"></span>{esc(p['kind'])} · {esc(p['year'])}</p>
+    <p class="kind kind-{p['kind_key']}">{esc(p['kind'])} · {esc(p['year'])}</p>
     <h1>{esc(p['title'])}</h1>
     <p class="lede">{esc(p['tagline'])}</p>
-    <div class="proj-links">{links}</div>
+    <div class="cta">{links}</div>
   </header>
   <figure class="proj-cover">{img_tag(path, w, h, p['title'] + ' cover', prefix, lazy=False)}</figure>
   <div class="proj-grid">
     <aside class="proj-side">
       <dl class="facts">{facts}</dl>
-      <ul class="tags">{tags}</ul>
+      {chips(p['tags'])}
     </aside>
     <article class="prose">{''.join(body)}</article>
   </div>
   <nav class="pn" aria-label="More projects">
     <a href="{prev_p['slug']}.html"><span>{ICONS['back']}Previous</span><b>{esc(prev_p['title'])}</b></a>
-    <a class="pn-next" href="{next_p['slug']}.html"><span>Next{ICONS['arrow']}</span><b>{esc(next_p['title'])}</b></a>
+    <a class="pn-next" href="{next_p['slug']}.html"><span>Next{ICONS['next']}</span><b>{esc(next_p['title'])}</b></a>
   </nav>
 </div>
 </main>
@@ -270,7 +307,6 @@ def main():
     build_index()
     for i, p in enumerate(PROJECTS):
         build_project(i, p)
-    # resume PDF
     pdf = Path(SITE["resume_source"])
     if pdf.exists():
         shutil.copy2(pdf, ROOT / SITE["resume_pdf"])
