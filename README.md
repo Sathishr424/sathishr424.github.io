@@ -19,16 +19,15 @@ python3 -m http.server 8000
 
 Then open http://localhost:8000.
 
-## Publish on GitHub Pages (free)
+## Publishing
 
-Your `Portfolio` repo is private, and Pages on a private repo needs a paid plan, so publish this folder as its own **public** repo. It contains only the anonymized client projects and no data files.
+Live at https://sathishr424.github.io/ (GitHub Pages, from the `main` branch of `sathishr424.github.io`). To update it, rebuild, commit and push:
 
-1. Create a public repo named exactly `sathishr424.github.io` on GitHub. That name gives you the address `https://sathishr424.github.io/`.
-2. Push this folder to it:
-   ```bash
-   git init -b main && git add . && git commit -m "Portfolio site" && git remote add origin https://github.com/Sathishr424/sathishr424.github.io.git && git push -u origin main
-   ```
-3. On GitHub: repo → Settings → Pages → Source: "Deploy from a branch", branch `main`, folder `/ (root)`. The site goes live within a minute or two.
+```bash
+python3 build/build.py && git add -A && git commit -m "Update site" && git push origin master:main
+```
+
+The previous site (2022-2023) is kept in the `old-portfolio` repo.
 
 ## Custom domain (optional, about $10–15 a year)
 
