@@ -6,6 +6,7 @@ It writes index.html, projects/*.html and assets/img/** (WebP copies of the
 images in ../Portfolio/projects). Edit the content in content.py, then re-run.
 Styles live in assets/site.css and interactions in assets/site.js.
 """
+import re
 import html
 import json
 import shutil
@@ -15,7 +16,7 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).parent))
-from content import SITE, PROJECTS, EXPERIENCE, SKILLS, CP  # noqa: E402
+from content import SITE, PROJECTS, EXPERIENCE, SKILLS, CP, SKILL_PROOF  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent            # portfolio-site/
 SRC = ROOT.parent / "Portfolio" / "projects"             # source images
@@ -241,6 +242,27 @@ def cp_section():
 """
 
 
+def skill_target(key):
+    if key == "pando":
+        return "Pando internship", "#experience"
+    if key == "leetcode":
+        return "LeetCode Guardian", "#leetcode"
+    p = next(p for p in PROJECTS if p["slug"] == key)
+    return p["title"], f"projects/{key}.html"
+
+
+def skill_chip(name):
+    """A skill chip. Skills shown in a project open a small list of where they are used."""
+    keys = SKILL_PROOF.get(name)
+    if not keys:
+        return f'<li class="plain">{esc(name)}</li>'
+    pid = "pf-" + re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+    links = "".join(f'<li><a href="{u}">{esc(t)}</a></li>' for t, u in map(skill_target, keys))
+    return (f'<li class="proven"><button type="button" class="proof-btn" aria-expanded="false" aria-controls="{pid}">'
+            f'{esc(name)}<span class="sr-only">, used in</span><span class="proof-n">{len(keys)}</span></button>'
+            f'<div class="proof" id="{pid}" hidden><p>Used in</p><ul>{links}</ul></div></li>')
+
+
 def build_index():
     stats = "".join(
         (f'<a class="stat stat-link" href="{SITE["upwork"]}" target="_blank" rel="noopener"><b>{esc(n)}</b><span>{esc(l)} {ICONS["ext"]}</span></a>'
@@ -251,7 +273,7 @@ def build_index():
     filters = '<button type="button" class="on" aria-pressed="true" data-f="all">All</button>' + "".join(
         f'<button type="button" aria-pressed="false" data-f="{esc(f)}">{esc(f)}</button>' for f in SITE["filters"])
     skills = "".join(
-        f'<div class="skill"><h3>{esc(k)}</h3><ul class="chips">{"".join(f"<li>{esc(x)}</li>" for x in v)}</ul></div>'
+        f'<div class="skill"><h3>{esc(k)}</h3><ul class="chips">{"".join(skill_chip(x) for x in v)}</ul></div>'
         for k, v in SKILLS)
 
     out = head(f"{SITE['name']} · {SITE['role']}", SITE["meta_description"], "", PROJECTS[0]["_cover"][0], "")
@@ -290,7 +312,7 @@ def build_index():
 </section>
 
 <section class="section wrap" id="skills" aria-labelledby="skills-h">
-  <div class="sec-head"><h2 id="skills-h">Skills</h2></div>
+  <div class="sec-head"><h2 id="skills-h">Skills</h2><p>A number shows how many projects on this site use a skill. Select it to see which ones.</p></div>
   <div class="skills">{skills}</div>
 </section>
 </main>

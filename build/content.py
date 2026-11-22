@@ -21,7 +21,7 @@ SITE = {
     "leetcode": "https://leetcode.com/u/sat_this_h/",
     "upwork": "https://www.upwork.com/freelancers/~01b87d2baf21208fc5",
     "resume_pdf": "Sathish-Kumar-Resume.pdf",
-    "resume_source": "/home/sathish/Documents/Sathish Resume 21th Nov 2026.pdf",
+    "resume_source": "/home/sathish/Documents/Sathish Resume 22th Nov 2026.pdf",
     "headline": "I build web apps, real‑time systems and the data pipelines behind them.",
     # Same as the resume summary.
     "intro": (
@@ -76,7 +76,7 @@ EXPERIENCE = [
     {
         "when": "Aug 2017 – Nov 2021",
         "role": "Structural Steel Detailer",
-        "where": "Cistron Infotek & Moldtek Technologies · Chennai",
+        "where": "Cistron Infotek & Moldtek Technologies Pvt. Ltd · Chennai",
         "points": [
             "Produced structural steel erection and shop drawings in Tekla Structures, following project specifications and applicable engineering standards.",
         ],
@@ -84,9 +84,9 @@ EXPERIENCE = [
 ]
 
 SKILLS = [
-    # Copied from "Sathish Resume 21th Nov 2026.pdf". Keep these in sync with the resume.
+    # Copied from "Sathish Resume 22th Nov 2026.pdf". Keep these in sync with the resume.
     ("Languages", ["JavaScript", "TypeScript", "Python", "Java", "C/C++", "PHP", "SQL", "Bash"]),
-    ("AI & LLM Engineering", ["LLM API Integration", "Claude SDK", "Tool/Function Calling", "Model Context Protocol (MCP)",
+    ("AI & LLM Engineering", ["LLM API Integration", "Tool/Function Calling", "Model Context Protocol (MCP)",
         "Agent-to-Tool Integration", "Agentic AI Workflows", "Multi-Step Agent Workflows", "Prompt & Context Engineering",
         "AI Coding Agents", "Claude Code", "AI-Assisted Development", "Retrieval-Augmented Generation (RAG)",
         "Advanced RAG Techniques", "Embeddings", "Vector Databases", "Similarity Search", "LangChain",
@@ -152,7 +152,7 @@ PROJECTS = [
         "tagline": "A real-time chat platform built to scale out, with presence, read receipts, files and GIFs, deployed on Kubernetes.",
         "kind": "Personal project", "kind_key": "personal", "year": "2026", "featured": True,
         "cover": "satchat/cover-upwork.png",
-        "tags": ["React", "TypeScript", "Node.js", "Socket.IO", "Redis", "PostgreSQL", "Kubernetes", "Jenkins"],
+        "tags": ["React", "TypeScript", "Node.js", "Express", "Socket.IO", "Redis", "PostgreSQL", "Prisma", "Kubernetes", "Jenkins"],
         "skills": ["React", "TypeScript", "Node.js", "WebSockets", "Redis", "Docker", "Kubernetes"],
         "facts": [("Role", "Sole developer"), ("Services", "7 containers behind Nginx"), ("Deploy", "Docker Compose or Kubernetes")],
         "links": [("Live demo", "https://satdevopsdummies.xyz/"), ("Source on GitHub", "https://github.com/Sathishr424/ChatApp_plus_devops")],
@@ -342,6 +342,60 @@ PROJECTS = [
     },
 ]
 
+
+# Where each skill is shown on the site. Keys must match SKILLS exactly.
+# Values are project slugs, or "pando" (Experience) / "leetcode" (LeetCode section).
+# Skills not listed here show as plain chips with no link.
+SKILL_PROOF = {
+    "JavaScript": ["price-tracker", "custom-order-builder"],
+    "TypeScript": ["mock-ai", "satchat", "text-editor-engine", "resume-builder"],
+    "Python": ["mock-ai", "ecommerce-scraping"],
+    "Java": ["pando"],
+    "PHP": ["price-tracker", "custom-order-builder"],
+    "SQL": ["satchat", "price-tracker", "custom-order-builder"],
+    "LLM API Integration": ["mock-ai"],
+    "Prompt & Context Engineering": ["mock-ai"],
+    "Claude Code": ["mock-ai"],
+    "AI-Assisted Development": ["mock-ai"],
+    "Hugging Face Transformers": ["mock-ai"],
+    "LLM Evaluation": ["mock-ai"],
+    "React": ["mock-ai", "satchat", "resume-builder"],
+    "Vue": ["price-tracker", "pando"],
+    "HTML": ["text-editor-engine", "resume-builder"],
+    "CSS": ["resume-builder"],
+    "Tailwind CSS": ["resume-builder"],
+    "Node.js": ["satchat", "pando"],
+    "Laravel": ["price-tracker", "custom-order-builder"],
+    "REST APIs": ["satchat"],
+    "Express.js": ["satchat"],
+    "Socket.IO": ["satchat"],
+    "PostgreSQL": ["satchat"],
+    "MySQL": ["price-tracker", "custom-order-builder"],
+    "MongoDB": ["pando"],
+    "Prisma ORM": ["satchat"],
+    "Redis": ["satchat"],
+    "Docker": ["mock-ai", "satchat"],
+    "Docker Compose": ["mock-ai", "satchat"],
+    "Linux": ["satchat"],
+    "Kubernetes": ["satchat"],
+    "Helm": ["satchat"],
+    "Jenkins": ["satchat"],
+    "Terraform": ["satchat"],
+    "Nginx": ["satchat"],
+    "AWS": ["satchat"],
+    "Oracle Cloud": ["satchat"],
+    "System Design (HLD, LLD)": ["satchat"],
+    "Distributed Systems": ["satchat"],
+    "Database Design": ["satchat"],
+    "Data Structures & Algorithms": ["text-editor-engine", "leetcode"],
+    "LeetCode Guardian (Max Rating 2144)": ["leetcode"],
+    "Selenium": ["ecommerce-scraping"],
+    "BeautifulSoup": ["ecommerce-scraping"],
+    "Puppeteer": ["ecommerce-scraping", "price-tracker"],
+    "Browser Automation": ["ecommerce-scraping"],
+    "Proxy Management": ["ecommerce-scraping", "price-tracker"],
+    "Structured Data Extraction": ["ecommerce-scraping", "price-tracker"],
+}
 
 # Competitive programming section (between Work and Experience).
 CP = {

@@ -84,6 +84,30 @@
     if (note) note.textContent = f === 'all' ? '' : `${n} of ${cards.length} projects use ${f}.`;
   }));
 
+  // Skills: select a skill to see which projects use it
+  const proofBtns = $$('.proof-btn');
+  const closeProof = (except) => proofBtns.forEach(b => {
+    if (b === except) return;
+    b.setAttribute('aria-expanded', 'false'); $('#' + b.getAttribute('aria-controls')).hidden = true;
+  });
+  proofBtns.forEach(b => b.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const box = $('#' + b.getAttribute('aria-controls')), open = b.getAttribute('aria-expanded') !== 'true';
+    closeProof(b);
+    b.setAttribute('aria-expanded', open); box.hidden = !open;
+    if (!open) return;
+    box.style.left = '0px';
+    const r = box.getBoundingClientRect(), edge = document.documentElement.clientWidth - 12;
+    if (r.right > edge) box.style.left = Math.min(0, edge - r.right) + 'px';
+    if (r.left < 12) box.style.left = (12 - r.left) + 'px';
+  }));
+  document.addEventListener('click', (e) => { if (!e.target.closest('.proof')) closeProof(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const b = proofBtns.find(x => x.getAttribute('aria-expanded') === 'true');
+    if (b) { closeProof(); b.focus(); }
+  });
+
   // Ctrl+K palette
   const pal = $('#pal'), input = $('#pal-in'), list = $('#pal-list');
   const data = JSON.parse(($('#nav-data') || {}).textContent || '[]');
