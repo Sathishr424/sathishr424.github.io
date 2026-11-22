@@ -1,6 +1,6 @@
 # Portfolio site
 
-Static site: plain HTML, CSS and a small vanilla JS file, no framework, no build step needed to host it. Dark theme with an interactive dot-grid hero, a skill filter on the projects, and a Ctrl+K palette to jump anywhere.
+Static site: plain HTML, CSS and a small vanilla JS file, no framework, no build step needed to host it. Light and dark themes (it follows the visitor's system setting until they pick one with the sun/moon switch or Ctrl+K, and remembers the choice), an interactive dot-grid hero, a skill filter on the projects, and a Ctrl+K palette to jump anywhere.
 
 - `index.html`: home page (intro, projects, experience, skills, contact)
 - `projects/*.html`: one case study per project

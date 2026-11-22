@@ -1,8 +1,26 @@
-// Interactions: header border, typed headline, dot grid, skill filter, Ctrl+K palette.
+// Interactions: light/dark theme, header border, typed headline, dot grid, skill filter, Ctrl+K palette.
 (() => {
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Theme: follows the system until the visitor picks one; the choice is remembered.
+  const root = document.documentElement, sysLight = matchMedia('(prefers-color-scheme: light)');
+  const current = () => root.dataset.theme || (sysLight.matches ? 'light' : 'dark');
+  const themeListeners = [];
+  const syncThemeUI = () => {
+    const cur = current(), next = cur === 'dark' ? 'light' : 'dark';
+    $$('[data-theme-toggle]').forEach(b => { b.dataset.current = cur; b.setAttribute('aria-label', `Switch to ${next} theme`); b.title = `Switch to ${next} theme`; });
+    themeListeners.forEach(f => f());
+  };
+  const toggleTheme = () => {
+    const next = current() === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    syncThemeUI();
+  };
+  $$('[data-theme-toggle]').forEach(b => b.addEventListener('click', toggleTheme));
+  sysLight.addEventListener('change', () => { if (!root.dataset.theme) syncThemeUI(); });
 
   // Header border once the page scrolls
   const top = $('.top');
@@ -27,6 +45,8 @@
   const cv = $('#dots');
   if (cv) {
     const cx = cv.getContext('2d'); const G = 28; let W = 0, H = 0, mx = -999, my = -999, raf = 0, visible = true;
+    let dot = '143,155,184', hi = '52,211,153', base = .08;
+    const readColors = () => { const s = getComputedStyle(root); dot = s.getPropertyValue('--dot').trim(); hi = s.getPropertyValue('--dot-hi').trim(); base = parseFloat(s.getPropertyValue('--dot-alpha')) || .08; };
     const size = () => { const r = devicePixelRatio || 1; W = cv.clientWidth; H = cv.clientHeight; cv.width = W * r; cv.height = H * r; cx.setTransform(r, 0, 0, r, 0, 0); };
     const draw = t => {
       cx.clearRect(0, 0, W, H);
@@ -34,11 +54,12 @@
         const dx = x - mx, dy = y - my, d = Math.hypot(dx, dy), f = Math.max(0, 1 - d / 170);
         const wave = still ? .5 : Math.sin(t / 900 + x / 140 + y / 180) * .5 + .5;
         const ox = d ? dx / d * f * 14 : 0, oy = d ? dy / d * f * 14 : 0;
-        cx.fillStyle = f > 0 ? `rgba(52,211,153,${.25 + f * .75})` : `rgba(143,155,184,${.08 + wave * .12})`;
+        cx.fillStyle = f > 0 ? `rgba(${hi},${.3 + f * .7})` : `rgba(${dot},${base + wave * .12})`;
         cx.beginPath(); cx.arc(x + ox, y + oy, 1.2 + f * 2.2, 0, 7); cx.fill();
       }
     };
     const loop = t => { draw(t); raf = visible ? requestAnimationFrame(loop) : 0; };
+    readColors(); themeListeners.push(() => { readColors(); if (still) draw(0); });
     size(); addEventListener('resize', () => { size(); if (still) draw(0); });
     const hero = cv.parentElement;
     hero.addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; if (still) draw(0); });
@@ -74,7 +95,7 @@
     input.setAttribute('aria-activedescendant', shown.length ? `opt-${sel}` : '');
     const cur = $(`#opt-${sel}`); if (cur) cur.scrollIntoView({ block: 'nearest' });
   };
-  const go = c => { close(); if (c.x) window.open(c.u, '_blank', 'noopener'); else location.href = c.u; };
+  const go = c => { close(); if (c.a === 'theme') toggleTheme(); else if (c.x) window.open(c.u, '_blank', 'noopener'); else location.href = c.u; };
   const open = () => { opener = document.activeElement; pal.hidden = false; input.value = ''; shown = data; sel = 0; render(); input.focus(); document.body.style.overflow = 'hidden'; };
   const close = () => { if (pal.hidden) return; pal.hidden = true; document.body.style.overflow = ''; if (opener && opener.focus) opener.focus(); };
   if (pal) {
@@ -93,4 +114,5 @@
       else if (e.key === 'Tab') { e.preventDefault(); input.focus(); }
     });
   }
+  syncThemeUI();
 })();

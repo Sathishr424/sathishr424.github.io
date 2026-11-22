@@ -59,6 +59,8 @@ ICONS = {
     "file": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M6 2.5h8l4 4v15H6z M14 2.5v4h4 M9 12h6 M9 16h6"/></svg>',
     "ext": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M14 4h6v6 M20 4l-9 9 M18 14v6H4V6h6"/></svg>',
     "search": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M10.5 3.5a7 7 0 1 1 0 14 7 7 0 0 1 0-14z M15.5 15.5 21 21"/></svg>',
+    "sun": '<svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>',
+    "moon": '<svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>',
     "back": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M19 12H5 M11 6l-6 6 6 6"/></svg>',
     "next": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M5 12h14 M13 6l6 6-6 6"/></svg>',
 }
@@ -79,6 +81,7 @@ def nav_data(prefix, home):
         {"t": "GitHub", "k": "Link", "u": SITE["github"], "x": 1},
         {"t": "LinkedIn", "k": "Link", "u": SITE["linkedin"], "x": 1},
         {"t": "Email me", "k": "Link", "u": f"mailto:{SITE['email']}"},
+        {"t": "Switch light / dark theme", "k": "Action", "a": "theme"},
     ]
     return json.dumps(items)
 
@@ -99,8 +102,10 @@ def head(title, description, prefix, og_image, path):
 <meta property="og:url" content="{esc(url)}">
 <meta property="og:image" content="{esc(SITE['url'].rstrip('/') + '/' + og_image)}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#0a0f1e">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0a0f1e" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f7fb" media="(prefers-color-scheme: light)">
+<script>try{{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}}catch(e){{}}</script>
 <link rel="icon" href="{prefix}assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -122,6 +127,7 @@ def header(prefix, home=False):
       <a href="{h}#work">Work</a><a href="{h}#experience">Experience</a><a href="{h}#skills">Skills</a><a href="#contact">Contact</a>
       <a href="{prefix}{SITE['resume_pdf']}" target="_blank" rel="noopener">Resume</a>
     </nav>
+    <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch theme">{ICONS['sun']}{ICONS['moon']}</button>
     <button class="kbtn" type="button" data-palette aria-haspopup="dialog">{ICONS['search']}<span>Jump to…</span><kbd>Ctrl K</kbd></button>
   </div>
 </header>
@@ -197,7 +203,9 @@ def build_index():
     stats = "".join(f'<div class="stat"><b>{esc(n)}</b><span>{esc(l)}</span></div>' for n, l in SITE["stats"])
     filters = '<button type="button" class="on" aria-pressed="true" data-f="all">All</button>' + "".join(
         f'<button type="button" aria-pressed="false" data-f="{esc(f)}">{esc(f)}</button>' for f in SITE["filters"])
-    skills = "".join(f'<div class="skill"><h3>{esc(k)}</h3><p>{esc(v)}</p></div>' for k, v in SKILLS)
+    skills = "".join(
+        f'<div class="skill"><h3>{esc(k)}</h3><ul class="chips">{"".join(f"<li>{esc(x)}</li>" for x in v)}</ul></div>'
+        for k, v in SKILLS)
 
     out = head(f"{SITE['name']} · {SITE['role']}", SITE["meta_description"], "", PROJECTS[0]["_cover"][0], "")
     out += header("", home=True)

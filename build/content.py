@@ -19,7 +19,7 @@ SITE = {
     "github": "https://github.com/Sathishr424",
     "linkedin": "https://linkedin.com/in/sat-this-h",
     "resume_pdf": "Sathish-Kumar-Resume.pdf",
-    "resume_source": "/mnt/games/claude-workspace/resume/Sathish Kumar Resume.pdf",
+    "resume_source": "/home/sathish/Documents/Sathish Resume 21th Nov 2026.pdf",
     "headline": "I build web apps, real‑time systems and the data pipelines behind them.",
     "intro": (
         "Full stack engineer with 5 years of experience and 90+ client projects shipped as a "
@@ -53,7 +53,7 @@ EXPERIENCE = [
         "where": "Upwork (Top Rated) & Fiverr · India",
         "points": [
             "Delivered 90+ client projects across e-commerce, legal, media and healthcare, owning the full lifecycle from requirements and architecture to implementation, deployment and client handover.",
-            "Designed and built 50+ product-data extraction pipelines in Python (Requests, BeautifulSoup, Selenium) and Node.js (Puppeteer) with proxy management, delivering structured CSV/JSON for price comparison and catalog building.",
+            "Designed and built 50+ product-data extraction pipelines in Python (Requests, BeautifulSoup, Selenium) and Node.js (Puppeteer) with proxy management, delivering structured CSV/JSON for price comparison and catalog systems.",
             "Automated bulk court-filing retrieval and built PDF extraction tooling that converts documents into structured JSON and Excel datasets, replacing manual data entry for legal clients.",
             "Shipped end-to-end web applications, Chrome extensions and browser-based audio recording solutions, translating loosely defined client needs into maintainable, production-ready systems.",
         ],
@@ -79,14 +79,22 @@ EXPERIENCE = [
 ]
 
 SKILLS = [
-    ("Languages", "JavaScript, TypeScript, Python, Java, C/C++, PHP, SQL, Bash"),
-    ("Frontend", "React, Next.js, Vue.js, Tailwind CSS, HTML Canvas"),
-    ("Backend", "Node.js, Express, FastAPI, Laravel, REST, WebSockets, Socket.IO"),
-    ("Data", "PostgreSQL, MySQL, MongoDB, Redis, Prisma"),
-    ("AI & LLM", "LLM APIs, tool calling, MCP, Whisper, Ollama, structured outputs"),
-    ("Scraping", "Selenium, undetected-chromedriver, Playwright, Puppeteer, BeautifulSoup, proxies"),
-    ("DevOps", "Docker, Kubernetes, Helm, Jenkins, GitHub Actions, Terraform, Nginx, AWS"),
-    ("Testing", "TDD, unit and integration tests, Playwright E2E, accessibility checks"),
+    # Copied from "Sathish Resume 21th Nov 2026.pdf". Keep these in sync with the resume.
+    ("Languages", ["JavaScript", "TypeScript", "Python", "Java", "C/C++", "PHP", "SQL", "Bash"]),
+    ("AI & LLM Engineering", ["LLM API Integration", "Claude SDK", "Tool/Function Calling", "Model Context Protocol (MCP)",
+        "Agent-to-Tool Integration", "Agentic AI Workflows", "Multi-Step Agent Workflows", "Prompt & Context Engineering",
+        "AI Coding Agents", "Claude Code", "AI-Assisted Development", "Retrieval-Augmented Generation (RAG)",
+        "Advanced RAG Techniques", "Embeddings", "Vector Databases", "Similarity Search", "LangChain",
+        "Hugging Face Transformers", "Gradio", "LLM Evaluation"]),
+    ("Frontend", ["React", "Next.js", "Vue", "HTML", "CSS", "Tailwind CSS"]),
+    ("Backend", ["Node.js", "Express.js", "Laravel", "REST APIs", "Socket.IO"]),
+    ("Databases & Caching", ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Prisma ORM"]),
+    ("DevOps & Cloud", ["Linux", "Docker", "Docker Compose", "Kubernetes", "Helm", "Jenkins", "GitHub Actions", "Terraform",
+        "Nginx", "AWS", "Oracle Cloud"]),
+    ("System Design & Algorithms", ["System Design (HLD, LLD)", "Distributed Systems", "Database Design",
+        "Data Structures & Algorithms", "LeetCode Guardian (Max Rating 2144)"]),
+    ("Web Scraping & Automation", ["Selenium", "Puppeteer", "BeautifulSoup", "Browser Automation", "Proxy Management",
+        "Structured Data Extraction"]),
 ]
 
 PROJECTS = [
