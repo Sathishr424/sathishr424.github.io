@@ -18,20 +18,24 @@ SITE = {
     "email": "rsathishikumar3@gmail.com",
     "github": "https://github.com/Sathishr424",
     "linkedin": "https://linkedin.com/in/sat-this-h",
+    "leetcode": "https://leetcode.com/u/sat_this_h/",
     "upwork": "https://www.upwork.com/freelancers/~01b87d2baf21208fc5",
     "resume_pdf": "Sathish-Kumar-Resume.pdf",
     "resume_source": "/home/sathish/Documents/Sathish Resume 21th Nov 2026.pdf",
     "headline": "I build web apps, real‑time systems and the data pipelines behind them.",
+    # Same as the resume summary.
     "intro": (
-        "Full stack engineer with 5 years of experience and 90+ client projects shipped as a "
-        "Top Rated freelancer on Upwork. I work across Python, Node.js and Laravel backends and "
-        "React and Vue frontends, and I like the hard parts: real-time voice and chat, editors "
-        "built from scratch, and scrapers that get through bot protection."
+        "Full Stack Software Engineer with 5 years of experience designing, building and shipping production web "
+        "applications, backend services, data pipelines and real-time systems end to end. Delivered 90+ client projects "
+        "as a Top Rated Upwork engineer, owning requirements, architecture, implementation and deployment. Comfortable "
+        "extending large legacy codebases (Java optimization engine, Vue.js/Node.js platform at Pando) as well as building "
+        "systems from scratch, including a real-time voice AI pipeline backed by 800+ automated tests. Hands-on with "
+        "Docker, Kubernetes, Terraform and CI/CD, and strong in algorithms (LeetCode Guardian, max rating 2144)."
     ),
     "meta_description": (
         "Sathish Kumar, full stack software engineer in Chennai. Case studies: a real-time voice "
         "AI interviewer, a scalable chat platform, a canvas text editor engine, and client work "
-        "in scraping and e-commerce."
+        "in scraping and e-commerce. LeetCode Guardian, max rating 2144 (top 1%)."
     ),
     "looking_for": (
         "I'm looking for a full-stack or backend role on a product team, working on real-time "
@@ -43,7 +47,7 @@ SITE = {
         ("5 yrs", "building and shipping software"),
         ("90+", "client projects delivered"),
         ("Top Rated", "on Upwork"),
-        ("2144", "LeetCode rating, top 1%"),
+        ("2144", "LeetCode Guardian, top 1%"),
     ],
 }
 
@@ -337,3 +341,28 @@ PROJECTS = [
         ],
     },
 ]
+
+
+# Competitive programming section (between Work and Experience).
+CP = {
+    "title": "LeetCode Guardian",
+    "lede": ("Guardian is LeetCode's highest contest badge. I reached a max contest rating of 2144, in the top 1% "
+             "of contest participants, solving timed algorithm problems against thousands of other programmers."),
+    "stats": [
+        ("2144", "max contest rating"),
+        ("Top 1%", "of contest participants"),
+        ("2,100+", "problems solved, all in a public repo"),
+    ],
+    "where": [
+        "<b>Text editor engine:</b> a linked-list text model so edits at the cursor cost O(1) however long the document is.",
+        "<b>Pando:</b> a stacking constraint added to a truck-loading optimization engine while keeping its existing optimization behavior.",
+        "<b>Price tracker:</b> daily, 30-day and all-time lows and sale runs worked out from every stored price snapshot.",
+    ],
+    "tool": ("I also built my own practice setup: a Chrome extension, a local Python daemon and a Neovim plugin "
+             "that open any LeetCode problem in Neovim as a ready-to-run file."),
+    "links": [
+        ("LeetCode profile", "leetcode"),
+        ("Solutions on GitHub", "https://github.com/Sathishr424/LeetcodeProblems"),
+        ("Neovim companion", "https://github.com/Sathishr424/LeetcodeCompanion"),
+    ],
+}

@@ -15,7 +15,7 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).parent))
-from content import SITE, PROJECTS, EXPERIENCE, SKILLS  # noqa: E402
+from content import SITE, PROJECTS, EXPERIENCE, SKILLS, CP  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent            # portfolio-site/
 SRC = ROOT.parent / "Portfolio" / "projects"             # source images
@@ -56,6 +56,7 @@ ICONS = {
     "github": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>',
     "linkedin": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05a3.75 3.75 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>',
     "upwork": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M3 8h18v12H3z M8.5 8V5.5a1.5 1.5 0 0 1 1.5-1.5h4a1.5 1.5 0 0 1 1.5 1.5V8 M3 13h18"/></svg>',
+    "code": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M8 7l-5 5 5 5 M16 7l5 5-5 5 M13.5 4l-3 16"/></svg>',
     "mail": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M3 5.5h18v13H3z M3.5 6l8.5 7 8.5-7"/></svg>',
     "file": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M6 2.5h8l4 4v15H6z M14 2.5v4h4 M9 12h6 M9 16h6"/></svg>',
     "ext": '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M14 4h6v6 M20 4l-9 9 M18 14v6H4V6h6"/></svg>',
@@ -72,6 +73,7 @@ def nav_data(prefix, home):
     h = "" if home else f"{prefix}index.html"
     items = [
         {"t": "Work", "k": "Section", "u": f"{h}#work"},
+        {"t": "Competitive programming (LeetCode Guardian)", "k": "Section", "u": f"{h}#leetcode"},
         {"t": "Experience", "k": "Section", "u": f"{h}#experience"},
         {"t": "Skills", "k": "Section", "u": f"{h}#skills"},
         {"t": "Contact", "k": "Section", "u": "#contact"},
@@ -82,6 +84,7 @@ def nav_data(prefix, home):
         {"t": "GitHub", "k": "Link", "u": SITE["github"], "x": 1},
         {"t": "LinkedIn", "k": "Link", "u": SITE["linkedin"], "x": 1},
         {"t": "Upwork profile", "k": "Link", "u": SITE["upwork"], "x": 1},
+        {"t": "LeetCode profile", "k": "Link", "u": SITE["leetcode"], "x": 1},
         {"t": "Email me", "k": "Link", "u": f"mailto:{SITE['email']}"},
         {"t": "Switch light / dark theme", "k": "Action", "a": "theme"},
     ]
@@ -126,7 +129,7 @@ def header(prefix, home=False):
   <div class="wrap top-in">
     <a class="brand" href="{prefix}index.html" aria-label="{esc(SITE['name'])}, home"><span class="mark">SK</span>{esc(SITE['name'])}</a>
     <nav class="nav" aria-label="Main">
-      <a href="{h}#work">Work</a><a href="{h}#experience">Experience</a><a href="{h}#skills">Skills</a><a href="#contact">Contact</a>
+      <a href="{h}#work">Work</a><a href="{h}#leetcode">LeetCode</a><a href="{h}#experience">Experience</a><a href="{h}#skills">Skills</a><a href="#contact">Contact</a>
       <a href="{prefix}{SITE['resume_pdf']}" target="_blank" rel="noopener">Resume</a>
     </nav>
     <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch theme">{ICONS['sun']}{ICONS['moon']}</button>
@@ -202,10 +205,48 @@ def job(e, i):
 </article>"""
 
 
+def cp_section():
+    stats = "".join(f'<div class="cp-stat"><b>{esc(n)}</b><span>{esc(l)}</span></div>' for n, l in CP["stats"])
+    where = "".join(f"<li>{x}</li>" for x in CP["where"])
+    links = "".join(
+        f'<a class="btn{" btn-primary" if i == 0 else ""}" href="{esc(SITE.get(u, u))}" target="_blank" rel="noopener">'
+        f'{ICONS["code"] if i == 0 else ICONS["github"]}{esc(t)}</a>'
+        for i, (t, u) in enumerate(CP["links"]))
+    return f"""<section class="section wrap" id="leetcode" aria-labelledby="cp-h">
+  <div class="sec-head"><h2 id="cp-h">Competitive programming</h2></div>
+  <div class="cp">
+    <div class="cp-hero">
+      <svg class="cp-badge" viewBox="0 0 120 136" aria-hidden="true">
+        <defs><linearGradient id="cpg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--blue)"/></linearGradient></defs>
+        <path d="M60 4 112 30v40c0 31-22 53-52 62C30 123 8 101 8 70V30z" fill="url(#cpg)" opacity=".14"/>
+        <path d="M60 4 112 30v40c0 31-22 53-52 62C30 123 8 101 8 70V30z" fill="none" stroke="url(#cpg)" stroke-width="3"/>
+        <path d="M60 22 96 40v28c0 22-15 38-36 45-21-7-36-23-36-45V40z" fill="none" stroke="url(#cpg)" stroke-width="1.5" opacity=".6"/>
+        <text x="60" y="76" text-anchor="middle" class="cp-badge-n">2144</text>
+        <text x="60" y="94" text-anchor="middle" class="cp-badge-l">MAX RATING</text>
+      </svg>
+      <div>
+        <p class="cp-kicker">LeetCode</p>
+        <h3 class="cp-title">{esc(CP['title'])}</h3>
+        <p class="cp-lede">{esc(CP['lede'])}</p>
+        <div class="cta">{links}</div>
+      </div>
+    </div>
+    <div class="cp-stats">{stats}</div>
+    <div class="cp-more">
+      <div><h4>Where it shows up in my work</h4><ul>{where}</ul></div>
+      <div><h4>Practice tooling I built</h4><p>{esc(CP['tool'])}</p></div>
+    </div>
+  </div>
+</section>
+"""
+
+
 def build_index():
     stats = "".join(
         (f'<a class="stat stat-link" href="{SITE["upwork"]}" target="_blank" rel="noopener"><b>{esc(n)}</b><span>{esc(l)} {ICONS["ext"]}</span></a>'
-         if "Upwork" in l else f'<div class="stat"><b>{esc(n)}</b><span>{esc(l)}</span></div>')
+         if "Upwork" in l else
+         f'<a class="stat stat-link stat-hl" href="{SITE["leetcode"]}" target="_blank" rel="noopener"><b>{esc(n)}</b><span>{esc(l)} {ICONS["ext"]}</span></a>'
+         if "LeetCode" in l else f'<div class="stat"><b>{esc(n)}</b><span>{esc(l)}</span></div>')
         for n, l in SITE["stats"])
     filters = '<button type="button" class="on" aria-pressed="true" data-f="all">All</button>' + "".join(
         f'<button type="button" aria-pressed="false" data-f="{esc(f)}">{esc(f)}</button>' for f in SITE["filters"])
@@ -226,6 +267,7 @@ def build_index():
       <a class="btn btn-primary" href="#work">See my work</a>
       <a class="btn" href="{SITE['resume_pdf']}" target="_blank" rel="noopener">{ICONS['file']}Resume</a>
       <a class="btn" href="{SITE['github']}" target="_blank" rel="noopener">{ICONS['github']}GitHub</a>
+      <a class="btn" href="{SITE['leetcode']}" target="_blank" rel="noopener">{ICONS['code']}LeetCode</a>
       <a class="btn" href="{SITE['linkedin']}" target="_blank" rel="noopener">{ICONS['linkedin']}LinkedIn</a>
       <a class="btn" href="{SITE['upwork']}" target="_blank" rel="noopener">{ICONS['upwork']}Upwork</a>
       <a class="btn" href="mailto:{SITE['email']}">{ICONS['mail']}Email</a>
@@ -241,6 +283,7 @@ def build_index():
   <div class="grid" id="grid">{''.join(card(p, i) for i, p in enumerate(PROJECTS))}</div>
 </section>
 
+{cp_section()}
 <section class="section wrap" id="experience" aria-labelledby="exp-h">
   <div class="sec-head"><h2 id="exp-h">Experience</h2></div>
   <div class="jobs">{''.join(job(e, i) for i, e in enumerate(EXPERIENCE))}</div>
