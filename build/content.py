@@ -242,38 +242,58 @@ PROJECTS = [
     {
         "slug": "text-editor-engine",
         "title": "Text Editor Engine",
-        "tagline": "A multi-page document editor built from scratch on HTML Canvas, with its own text model, layout, cursor and undo.",
+        "tagline": "A multi-page document editor built from scratch on HTML Canvas, with its own text model, layout, rendering, undo and live collaboration.",
         "kind": "Personal project", "kind_key": "personal", "year": "2025",
         "cover": "text-editor-engine/01-cover.png",
-        "tags": ["TypeScript", "HTML Canvas", "Data structures", "Dependency injection", "Pub/sub"],
-        "skills": ["TypeScript", "Canvas"],
-        "facts": [("Role", "Sole developer"), ("Core libraries", "None"), ("Next", "Real-time collaboration")],
+        "tags": ["TypeScript", "HTML Canvas", "Data structures", "Socket.IO", "Node.js", "Command pattern", "Pub/sub"],
+        "skills": ["TypeScript", "Canvas", "WebSockets", "Node.js"],
+        "facts": [("Role", "Sole developer"), ("Built", "Oct–Nov 2025"), ("Core libraries", "None"),
+                  ("Edits at the cursor", "O(1)"), ("Collaboration", "Live, ordered by the server")],
         "links": [("Source on GitHub", "https://github.com/Sathishr424/DistributedRealTimeCollaborativeDocumentEditor")],
         "body": [
             ("h", "Why build it"),
             ("p", "Most web editors sit on <code>contenteditable</code> or a library like ProseMirror. I wanted to understand what "
                   "those hide, so I wrote every layer myself: how text is stored, how it becomes lines and pages, how it's painted, "
-                  "and how the cursor, selection and undo stay consistent through all of it."),
+                  "and how the cursor, selection, undo and other people's edits stay consistent through all of it."),
             ("h", "What it does"),
-            ("ul", ["<b>Multi-page documents.</b> Text flows onto new pages as you type and empty pages disappear. Each page is its own canvas, and clicks map back to the right page and position.",
-                    "<b>Cursor and selection.</b> Arrow keys, Shift and Ctrl combinations, word, line and drag selection, across wrapped lines and page breaks.",
-                    "<b>Undo and redo.</b> Every edit is an insert or delete operation on a history stack. Continuous typing merges into one step, and undo restores the cursor too.",
-                    "<b>Commands.</b> Keyboard input goes through a command registry, so shortcuts can be rebound."]),
+            ("ul", ["<b>Multi-page documents.</b> Text flows onto a new page as you type and empty pages disappear. Each page is its own canvas, and clicks map back to the right page, row and column.",
+                    "<b>Cursor and selection.</b> Arrow keys, Shift and Ctrl combinations, word jumps and deletes, select all and drag selection, across wrapped lines and page breaks.",
+                    "<b>Undo and redo</b> built on operations that each have an exact inverse.",
+                    "<b>Real-time collaboration.</b> Several people edit the same document live, shared by link with read or write access."]),
+            ("h", "The text model: two stacks that meet at the cursor"),
+            ("p", "The document is stored as two character stacks: everything before the cursor on one, everything after it on the "
+                  "other in reverse. It's the idea behind a gap buffer. Typing is a push and Backspace or Delete is a pop, so an edit "
+                  "at the cursor is O(1) however long the document is. Moving the cursor k characters moves k characters from one "
+                  "stack to the other."),
+            ("ul", ["<b>Line data split the same way.</b> For every line the model keeps its length and how many screen rows it wraps to, in two more stacks on either side of the cursor's line. Crossing a newline moves one record from one side to the other.",
+                    "<b>Running totals, never recounted.</b> It keeps the number of wrapped rows above and below the cursor and adjusts them on every insert, delete and newline. So the cursor's on-screen row and column come from arithmetic in O(1), not from scanning the document.",
+                    "<b>A hand-written deque</b> on a doubly linked list holds the line lengths, with O(1) push and pop at both ends. Lines cross over at the back of one side and the front of the other, so both ends are needed.",
+                    "<b>One model, two places.</b> The collaboration server keeps its copy of each document in the same text model, so the client and server apply edits the same way."]),
+            ("img", "text-editor-engine/03-text-model-and-undo.png", "Two stacks at the cursor, and undo built from invertible operations."),
+            ("h", "Undo and redo as invertible operations"),
+            ("ul", ["Every edit is recorded as one of four operations: an insert or a delete, to the left or the right of the cursor. Each one knows how to apply itself and has an exact inverse.",
+                    "Undo pops the history stack, applies the operation and pushes its inverse onto the redo stack. Redo does the same in the other direction, and a new edit clears the redo stack.",
+                    "Operations can be chained, so a group of edits undoes as one step. Each one also stores where the cursor was, so undo puts the cursor back too."]),
+            ("h", "Painting only what's on screen"),
+            ("p", "The renderer never draws the whole document. From the scroll position it works out, with arithmetic alone, which "
+                  "page and rows are in view, adds a buffer of 100 rows above and below, and paints only that window: clearing those "
+                  "rows, drawing their characters, then drawing the selection over them. Pages are separate canvases created when text "
+                  "overflows and removed when one empties, so the drawing work depends on the window, not on the document's length."),
+            ("img", "text-editor-engine/04-lazy-rendering.png", "Only the rows in view, plus a 100-row buffer, are painted."),
             ("h", "Architecture"),
             ("img", "text-editor-engine/02-architecture.png", "Input flows one way; the renderer only listens for events."),
-            ("p", "Keyboard and mouse go to an input controller, then a command registry, then a document service that coordinates "
-                  "the text model, cursor, history and layout. Those publish events, and the renderer listens. Nothing calls the "
-                  "renderer directly, so each part can be tested and replaced on its own, and subsystems are passed in by dependency injection."),
-            ("h", "The text model"),
-            ("img", "text-editor-engine/03-text-model-and-undo.png", "A linked list backed by a custom deque, with operation-based undo."),
-            ("p", "Text lives in a doubly linked list backed by a custom deque. Typing at the cursor relinks two neighbouring nodes "
-                  "instead of shifting an array, so an edit near the cursor costs the same however long the document is."),
-            ("h", "Lazy rendering"),
-            ("img", "text-editor-engine/04-lazy-rendering.png", "Only the region an edit touched is repainted."),
-            ("p", "An edit marks only the affected region of one page for repainting, so typing stays fast as documents grow."),
+            ("ul", ["<b>One orchestrator, injected parts.</b> A document service builds the layout engine, page controller, cursor, text controller, input controller and renderer, and hands each one the parts it needs through its constructor. Nothing reaches for a global, so each part can be replaced or tested on its own.",
+                    "<b>Command pattern for every shortcut.</b> A registry maps 20 key combinations (arrows, their Shift and Ctrl versions, Backspace, Delete, Enter, Tab, undo, redo and select all) to command classes that share one constructor. A new shortcut is one class and one line in the registry.",
+                    "<b>Two event buses.</b> Text and cursor changes go out on one bus and render requests on another. The renderer only subscribes, so nothing calls it directly.",
+                    "<b>Key and clipboard handling kept apart.</b> Key combinations are tracked in their own state object, and copy, cut and paste have their own handlers, so the commands never deal with raw browser events."]),
+            ("h", "Real-time collaboration"),
+            ("ul", ["An edit doesn't change the local text straight away. It goes to the server with the document version it was made against.",
+                    "The server keeps a log of operations by version. If other people edited since that version, it shifts the incoming edit's position past every newer insert and delete (operational transformation by index), applies it, bumps the version and broadcasts it.",
+                    "Every client, the sender included, applies the server's ordered version, so everyone ends up with the same text. If someone else inserts above your cursor, your cursor moves with your text.",
+                    "The server saves each document to disk at most once a second and caps how many people can join one document."]),
             ("h", "Next"),
-            ("p", "Real-time collaboration: a server that orders and transforms operations (OT, or a sequence CRDT), shared cursors, "
-                  "per-user undo and merging offline edits."),
+            ("p", "Mapping between a screen row and a character position scans the lines today; the code is marked for an O(log n) "
+                  "version, which is the next step."),
         ],
     },
     # ------------------------------------------------------------------ Resume builder
@@ -438,11 +458,11 @@ SKILL_PROOF = {
     "HTML": ["text-editor-engine", "resume-builder"],
     "CSS": ["resume-builder"],
     "Tailwind CSS": ["resume-builder"],
-    "Node.js": ["satchat", "pando"],
+    "Node.js": ["satchat", "text-editor-engine", "pando"],
     "Laravel": ["price-tracker", "custom-order-builder"],
     "REST APIs": ["satchat"],
     "Express.js": ["satchat"],
-    "Socket.IO": ["satchat"],
+    "Socket.IO": ["satchat", "text-editor-engine"],
     "PostgreSQL": ["satchat"],
     "MySQL": ["price-tracker", "custom-order-builder"],
     "MongoDB": ["pando"],
@@ -483,7 +503,7 @@ CP = {
     ],
     "where": [
         "<b>SatChat:</b> exponential and binary search over a conversation, so jumping to any search result takes O(log n) one-row queries instead of loading page after page.",
-        "<b>Text editor engine:</b> a linked-list text model so edits at the cursor cost O(1) however long the document is.",
+        "<b>Text editor engine:</b> two stacks that meet at the cursor, plus running row totals, so edits and cursor position are O(1) however long the document is.",
         "<b>Pando:</b> a stacking constraint added to a truck-loading optimization engine while keeping its existing optimization behavior.",
         "<b>Price tracker:</b> daily, 30-day and all-time lows and sale runs worked out from every stored price snapshot.",
     ],
